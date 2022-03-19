@@ -1,0 +1,36 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\author{Biscaldi Ivan}
+\title{TP 1.1 - SIMULACIÓN DE UNA RULETA}
+\date{Marzo 2022}
+
+\begin{document}
+	\begin{titlepage}
+		\centering
+		{\bfseries\LARGE Universidad Tecnol\'ogica Nacional \par}
+		\vspace{1cm}
+		{\scshape\Large Facultad Regional Rosario \par}
+		\vspace{3cm}
+		{\itshape\Large T\'itulo del proyecto \par}
+		\vspace{1cm}
+		{\scshape\Huge TP 1.1 - SIMULACIÓN DE UNA RULETA \par}
+		\vspace{2cm}
+		{\scshape\Large Simulacion Com. 402 \par}
+		\vfill
+		{\scshape\Large Integrantes: \par}
+		{\Large Biscaldi Ivan \par}
+		{\Large Chiaro Valentina \par}
+		{\Large Fierro Nicolas \par}
+		{\Large Garc\'ia Narela \par}
+		{\Large Sandoval Juliam \par}
+		\vfill
+		{\Large Marzo 2022 \par}
+	\end{titlepage}
+\end{document}
