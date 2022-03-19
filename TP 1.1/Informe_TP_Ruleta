@@ -18,7 +18,7 @@
 		\vspace{1cm}
 		{\scshape\Large Facultad Regional Rosario \par}
 		\vspace{3cm}
-		{\itshape\Large T\'itulo del proyecto \par}
+		{\itshape\Large T\'itulo del trabajo \par}
 		\vspace{1cm}
 		{\scshape\Huge TP 1.1 - SIMULACIÓN DE UNA RULETA \par}
 		\vspace{2cm}
@@ -29,8 +29,66 @@
 		{\Large Chiaro Valentina \par}
 		{\Large Fierro Nicolas \par}
 		{\Large Garc\'ia Narela \par}
-		{\Large Sandoval Juliam \par}
+		{\Large Sandoval Julian \par}
 		\vfill
 		{\Large Marzo 2022 \par}
 	\end{titlepage}
+
+	\section{Introduccion}
+	La ruleta es un juego de azar típico de los casinos, cuyo nombre viene del término francés roulette, que significa
+"ruedita" o "rueda pequeña". Su uso como elemento de juego de azar, aún en configuraciones distintas de la actual, no
+está documentado hasta bien entrada la Edad Media. Es de suponer que su referencia más antigua es la llamada Rueda
+de la Fortuna, de la que hay noticias a lo largo de toda la historia, prácticamente en todos los campos del saber humano.
+
+La “magia” del movimiento de las ruedas tuvo que impactar a todas las generaciones. La aparente quietud del centro, el
+aumento de velocidad conforme nos alejamos de él, la posibilidad de que se detenga en un punto al azar; todo esto tuvo
+que influir en el desarrollo de distintos juegos que tienen la rueda como base.
+
+Las ruedas, y por extensión las ruletas, siempre han tenido conexión con el mundo mágico y esotérico. Así, una de ellas
+forma parte del tarot, más precisamente de los que se conocen como arcanos mayores.
+
+Según los indicios, la creación de una ruleta y sus normas de juego, muy similares a las que conocemos hoy en día,
+se debe a Blaise Pascal, matemático francés, quien ideó una ruleta con treinta y seis números (sin el cero), en la que
+se halla un extremado equilibrio en la posición en que está colocado cada número. La elección de 36 números da
+un alcance aún más vinculado a la magia (la suma de los primeros 36 números da el número mágico por excelencia:
+seiscientos sesenta y seis).
+
+Esta ruleta podía usarse como entretenimiento en círculos de amistades. Sin embargo, a nivel de empresa que pone los
+medios y el personal para el entretenimiento de sus clientes, no era rentable, ya que estadísticamente todo lo que se
+apostaba se repartía en premios (probabilidad de 1/36 de acertar el número y ganar 36 veces lo apostado).
+
+En 1842, los hermanos Blanc modificaron la ruleta añadiéndole un nuevo número, el 0, y la introdujeron inicialmente
+en el Casino de Montecarlo. Ésta es la ruleta que se conoce hoy en día, con una probabilidad de acertar de 1/37 y ganar
+36 veces lo apostado, consiguiendo un margen para la casa del 2,7\% (1/37).
+Más adelante, en algunas ruletas (sobre todo las que se usan en países anglosajones) se añadió un nuevo número (el
+doble cero), con lo cual el beneficio para el casino resultó ser doble (2/38 o 5,26\%).
+		\vspace{3cm}
+		\vfill		
+	\footnote{Wikipedia https://es.wikipedia.org/wiki/Ruleta}
+	\section{Graficas}
+	\begin{Large}
+	A continuacion se observan las graficas de frecuencia relativa  \textbf{$f_{r}$}, valor promedio \textbf{$v_{p}$}, valor del desvio estandar\textbf{$v_{d}$} y valor de la varianza \textbf{$v_{ve}$}
+	\end{Large}
+	\vspace{1cm}
+	\subsection{10 corridas, 50 tiradas}
+	\includegraphics[scale=0.75]{Figure_1.png} 
+	\section{Formulas}
+		\subsection{Frecuencia Relativa}
+		\begin{LARGE}
+		$f_{r}=\frac{1}{n} $
+		\end{LARGE}	
+		\subsection{Promedio}
+		\begin{LARGE}
+		$\mu=\frac{1}{n} *\sum\limits_{i=1}^{n}{x_{i}}= \frac{x_{1}+x_{2}+...+x_{n}}{n}$
+		\end{LARGE}
+	\subsection{Desvio estandar}
+	\begin{LARGE}
+	$ \sigma^{2}= \frac{1}{n} *\sum\limits_{i=1}^{n}{(x_{i}-\mu)^{2}} $
+	\end{LARGE}
+	\subsection{Varianza}
+	\begin{LARGE}
+	$ \sigma=\sqrt{\frac{1}{n} *\sum\limits_{i=1}^{n}{(x_{i}-\mu)^{2}}} $
+	\end{LARGE}
+	\section{Concluciones}
+	\section{Referencias}
 \end{document}
