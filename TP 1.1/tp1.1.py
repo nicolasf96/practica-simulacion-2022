@@ -14,11 +14,11 @@ def frecuenciaR(nro, valores):
     return freqRel
 
 frecuencia= 1/37
-esperanza= np.arange(0, 37).mean()
-desvio= np.arange(0, 37).std()
-varianza= np.arange(0, 37).var()
+esperanza= np.arange(0, 37).mean()  #Media aritmética
+desvio= np.arange(0, 37).std() #Desviación Estándar
+varianza= np.arange(0, 37).var() #Varianza
 
-t = 50 #número de tiradas
+t = 100 #número de tiradas
 c = 10 #número de corridas
 nroEvaluar = np.random.randint(0,37)
 
