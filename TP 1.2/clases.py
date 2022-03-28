@@ -17,9 +17,10 @@ class Jugador:
         cls._last_id += 1
         return cls._last_id
 
-    def __init__(self, capital: float = 0) -> None:
+    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
         self.id = self.gen_id()
         self.capital = capital
+        self.apuesta_0 = apuesta_ini
 
     def apostar(self) -> None:
         """Se selecciona una tipo de apuesta entre par/impar, rojo/negro o primeros 18/ultimos 18"""
@@ -43,6 +44,11 @@ class Jugador:
             if selector2 in negros:
                 self.prox_apuesta = "negro"
 
+    def gana_apuesta(self, num: int) -> bool:
+        return (num//2 == 0 and self.prox_apuesta == "par") or (num//2 != 0 and self.prox_apuesta == "impar") or (
+            num in negros and self.prox_apuesta == "negro") or (num in rojos and self.prox_apuesta == "rojo") or (
+            num in range(1, 19) and self.prox_apuesta == "[1-18]") or (num in range(19, 37) and self.prox_apuesta == "[19-36]")
+
 
 class JugadorMG(Jugador):
     """Jugadores que siguen metodo martingala. 
@@ -50,9 +56,8 @@ class JugadorMG(Jugador):
 
     def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
         """La apuesta inicial es por defecto la minima"""
-        super().__init__(capital)
+        super().__init__(capital, apuesta_ini)
         self.juegos_perdidos = 0
-        self.apuesta_0 = apuesta_ini
 
     def preparar_apuesta(self) -> None:
         # se selecciona el monto a apostar
@@ -71,9 +76,7 @@ class JugadorMG(Jugador):
 
     def jugar(self, num: int) -> None:
         self.preparar_apuesta()
-        if (num//2 == 0 and self.prox_apuesta == "par") or (num//2 != 0 and self.prox_apuesta == "impar") or (
-                num in negros and self.prox_apuesta == "negro") or (num in rojos and self.prox_apuesta == "rojo") or (
-                num in range(1, 19) and self.prox_apuesta == "[1-18]") or (num in range(19, 37) and self.prox_apuesta == "[19-36]"):
+        if self.gana_apuesta(num):
             self.capital += self.monto_prox_apuesta
             # self.juegos_perdidos = 0  #setear en 0 si se debe reiniciar
         else:
@@ -87,9 +90,8 @@ class JugadorParoli(Jugador):
 
     def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
         """La apuesta inicial es por defecto la minima"""
-        super().__init__(capital)
+        super().__init__(capital, apuesta_ini)
         self.racha_positiva = 0
-        self.apuesta_0 = apuesta_ini
 
     def preparar_apuesta(self) -> None:
         # se selecciona el monto a apostar
@@ -108,11 +110,56 @@ class JugadorParoli(Jugador):
 
     def jugar(self, num: int) -> None:
         self.preparar_apuesta()
-        if (num//2 == 0 and self.prox_apuesta == "par") or (num//2 != 0 and self.prox_apuesta == "impar") or (
-                num in negros and self.prox_apuesta == "negro") or (num in rojos and self.prox_apuesta == "rojo") or (
-                num in range(1, 19) and self.prox_apuesta == "[1-18]") or (num in range(19, 37) and self.prox_apuesta == "[19-36]"):
+        if self.gana_apuesta(num):
             self.capital += self.monto_prox_apuesta
             self.racha_positiva += 1
         else:
             self.capital -= self.monto_prox_apuesta
             self.racha_positiva = 0
+
+
+class JugadorGuetting(Jugador):
+    """Jugadores que siguen metodo Guetting"""
+    grilla_de_apuestas = ((2,), (3, 4, 6), (8, 12, 16),
+                          (20, 30, 40), (60, 80, 100))
+
+    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
+        super().__init__(capital, apuesta_ini)
+        self.nivel: int = 0
+        self.fase: int = 0
+        self.ultimo_resultado: bool = None
+
+    def siguiente_fase(self) -> None:
+        """Cuando se ganan dos jugadas consecutivas se mueve a la fase siguiente"""
+        if self.nivel == 0:
+            self.nivel += 1
+            return
+        if self.fase < 2:
+            self.fase += 1
+            return
+        elif not (self.nivel == 4 and self.fase == 2):
+            self.nivel += 1
+            self.fase = 0
+
+    def fase_anterior(self) -> None:
+        """Si se pierden 2 jugadas consecutivas se vuelve a la fase anterior"""
+        if self.nivel >= 1:
+            if self.fase == 0:
+                self.nivel -= 1
+                if self.nivel != 0:
+                    self.fase = 2
+                return
+            self.fase -= 1
+
+    def jugar(self, num: int) -> None:
+        self.apostar()
+        if self.gana_apuesta(num):
+            self.capital += JugadorGuetting.grilla_de_apuestas[self.nivel][self.fase]
+            if self.ultimo_resultado is True:
+                self.siguiente_fase()
+            self.ultimo_resultado = True
+        else:
+            self.capital -= JugadorGuetting.grilla_de_apuestas[self.nivel][self.fase]
+            if self.ultimo_resultado is False:
+                self.fase_anterior()
+            self.ultimo_resultado = False
