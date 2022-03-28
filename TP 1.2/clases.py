@@ -29,7 +29,7 @@ class Jugador:
         if selector == 1:
             """Se apuesta por par o impar"""
             self.prox_apuesta = "impar"
-            if selector2//2 == 0:
+            if selector2 % 2 == 0:
                 self.prox_apuesta = "par"
 
         elif selector == 2:
@@ -45,7 +45,7 @@ class Jugador:
                 self.prox_apuesta = "negro"
 
     def gana_apuesta(self, num: int) -> bool:
-        return (num//2 == 0 and self.prox_apuesta == "par") or (num//2 != 0 and self.prox_apuesta == "impar") or (
+        return (num % 2 == 0 and self.prox_apuesta == "par") or (num % 2 != 0 and self.prox_apuesta == "impar") or (
             num in negros and self.prox_apuesta == "negro") or (num in rojos and self.prox_apuesta == "rojo") or (
             num in range(1, 19) and self.prox_apuesta == "[1-18]") or (num in range(19, 37) and self.prox_apuesta == "[19-36]")
 
@@ -58,9 +58,10 @@ class JugadorMG(Jugador):
         """La apuesta inicial es por defecto la minima"""
         super().__init__(capital, apuesta_ini)
         self.juegos_perdidos = 0
+        self.apostar()  # se mantiene la apuesta hasta ganar
 
     def preparar_apuesta(self) -> None:
-        # se selecciona el monto a apostar
+        """Se selecciona el monto a apostar"""
         apuesta = self.apuesta_0*(2**self.juegos_perdidos)
 
         if apuesta <= self.capital:
@@ -71,14 +72,12 @@ class JugadorMG(Jugador):
         else:
             self.monto_prox_apuesta = 0  # se deja de apostar cuando el capital se termina
 
-        # se selecciona la forma de apuesta
-        self.apostar()
-
     def jugar(self, num: int) -> None:
         self.preparar_apuesta()
         if self.gana_apuesta(num):
             self.capital += self.monto_prox_apuesta
-            # self.juegos_perdidos = 0  #setear en 0 si se debe reiniciar
+            self.juegos_perdidos = 0  # se reinicia el martingala
+            self.apostar()  # se cambia el elemento a apostar
         else:
             self.capital -= self.monto_prox_apuesta
             self.juegos_perdidos += 1
