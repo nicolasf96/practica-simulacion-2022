@@ -131,6 +131,7 @@ class JugadorGuetting(Jugador):
 
     def siguiente_fase(self) -> None:
         """Cuando se ganan dos jugadas consecutivas se mueve a la fase siguiente"""
+        self.ultimo_resultado = None
         if self.nivel == 0:
             self.nivel += 1
             return
@@ -143,6 +144,7 @@ class JugadorGuetting(Jugador):
 
     def fase_anterior(self) -> None:
         """Si se pierden 2 jugadas consecutivas se vuelve a la fase anterior"""
+        self.ultimo_resultado = None
         if self.nivel >= 1:
             if self.fase == 0:
                 self.nivel -= 1
