@@ -61,5 +61,29 @@ def tirada() -> int:
 # dineroMartinGalaAcotadM= [[0 for x in range(t)] for y in range(c)]
 
 
+
+
+valorApuesta = 50 #Valor de la apuesta
+valorApuestaIdeal = valorApuesta * 100
+capAcotado = 1000 #Capital acotado
+capIdeal = 200000 #Capital ideal
+
+t = 100 #número de tiradas
+c = 10 #número de corridas
+
+#Estrategia Martingala
+#Tomamos como ganadores a los numeros pares
+
+
+dineroMartinGalaAcotado= [[0 for x in range(t)] for y in range(c)]
+frecRelativasMG = []
+dineroMartinGalaAcotadM= [[0 for x in range(t)] for y in range(c)]
+
+dineroMartinGalaIdeal= [[0 for x in range(t)] for y in range(c)]
+dineroFibonacciIdeal= [[0 for x in range(t)] for y in range(c)]
+dineroFibonacciX100Ideal= [[0 for x in range(t)] for y in range(c)]
+
+graficaFrecFavorable(dineroMartinGalaAcotado[1],"Frecuencia Relativa - Martingala")
+dineroMartinGalaIdeal =  martinGala(valorApuestaIdeal,capIdeal,t,c)
 # graficoDineroUnicaTirada(dineroMartinGalaIdeal[0],'Estrategia Martingala',capIdeal)
 # graficoDineroTiradasMultiples(dineroMartinGalaIdeal[0],'MartinGala - Capital Ideal',capIdeal)
