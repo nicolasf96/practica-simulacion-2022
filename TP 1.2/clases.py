@@ -124,6 +124,7 @@ class JugadorGuetting(Jugador):
 
     def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
         super().__init__(capital, apuesta_ini)
+        self.victorias = 0
         self.nivel: int = 0
         self.fase: int = 0
         self.ultimo_resultado: bool = None
@@ -159,8 +160,11 @@ class JugadorGuetting(Jugador):
             if self.ultimo_resultado is True:
                 self.siguiente_fase()
             self.ultimo_resultado = True
+            self.victorias+=1
         else:
             self.capital -= JugadorGuetting.grilla_de_apuestas[self.nivel][self.fase]
             if self.ultimo_resultado is False:
                 self.fase_anterior()
             self.ultimo_resultado = False
+
+
