@@ -1,5 +1,5 @@
 from clases import negros, rojos, randint, apuesta_minima, JugadorMG, JugadorParoli, JugadorGuetting
-import matplotlib as plt
+from matplotlib import pyplot as plt
 
 
 def graficoDineroUnicaTirada(dineroTiempo, titulo, dineroInicial):
@@ -15,7 +15,7 @@ def graficoDineroUnicaTirada(dineroTiempo, titulo, dineroInicial):
     # Linea invisible para agregar legend
     plt.axhline(dineroInicial, color='w', ls="solid", visible=False)
     dineroIni = 'Capital inicial: ' + str(dineroInicial)
-    dineroFin = ('Capital Final: ' + str(dineroTiempo[0][t-1]))
+    dineroFin = (f'Capital Final{dineroTiempo[0]}')
     plt.legend((dineroIni, dineroFin), loc="best")
     plt.ioff()
     plt.show()
@@ -82,30 +82,73 @@ dineroguetting = [[0 for x in range(t)] for y in range(c)]
 dineroFibonacciIdeal = [[0 for x in range(t)] for y in range(c)]
 dineroFibonacciX100Ideal = [[0 for x in range(t)] for y in range(c)]
 
-graficaFrecFavorable(
-    dineroMartinGalaAcotado[1], "Frecuencia Relativa - Martingala")
-dineroMartinGalaIdeal = martinGala(valorApuestaIdeal, capIdeal, t, c)
+# graficaFrecFavorable(
+#   dineroMartinGalaAcotado[1], "Frecuencia Relativa - Martingala")
+#dineroMartinGalaIdeal = martinGala(valorApuestaIdeal, capIdeal, t, c)
 # graficoDineroUnicaTirada(dineroMartinGalaIdeal[0],'Estrategia Martingala',capIdeal)
 # graficoDineroTiradasMultiples(dineroMartinGalaIdeal[0],'MartinGala - Capital Ideal',capIdeal)
 
 apuesta_minima = 1
-j1 = JugadorGuetting(capital=10E5, apuesta_ini=1)
+j1 = JugadorGuetting(capital=50, apuesta_ini=1)
 guetting = []
 
 for i in range(10):
-    guetting.append(JugadorGuetting(capital=10E5, apuesta_ini=1))
+    guetting.append(JugadorGuetting(capital=50, apuesta_ini=1))
 
 resultadosj1 = [j1.capital, ]
 
-"""for i in range(100):
-    n=tirada()
+for i in range(100):
+    n = tirada()
     j1.jugar(n)
     resultadosj1.append(j1.capital)
-    f=0
-    for jugador in guetting:
+
+resultados = []
+for jugador in guetting:
+    lista = []
+    for i in range(100):
+        n = tirada()
         jugador.jugar(n)
+        lista.append(jugador.capital)
+    resultados.append(lista)
 
-        f+=1"""
+# graficoDineroUnicaTirada(dineroTiempo=resultadosj1,
+#                        dineroInicial=10E5, titulo="abc")
 
-graficoDineroUnicaTirada(dineroTiempo=resultadosj1,
-                         dineroInicial=10E5, titulo="abc")
+plt.title("Metodo Guetting- Flujo de dinero respecto a n tiradas")
+plt.axhline(50, color='k', ls="solid")
+plt.plot(resultadosj1, linewidth=1.2)
+plt.xlabel("(Número de tiradas)")
+plt.ylabel("Capital en el tiempo")
+# Me ajustan los x e y
+ax = plt.gca()
+ax.relim()
+ax.autoscale_view()
+# Linea invisible para agregar legend
+plt.axhline(50, color='w', ls="solid", visible=False)
+dineroIni = 'Capital inicial: ' + str(50)
+dineroFin = (f'Capital Final{resultadosj1[-1]}')
+plt.legend((dineroIni, dineroFin), loc="best")
+plt.ioff()
+plt.show()
+
+for i in range(10):
+    plt.title(
+        "Metodo Guetting- Flujo de dinero de 10 apostadores respecto a n tiradas")
+    plt.axhline(50, color='k', ls="solid")
+    plt.axhline(50 * 1.5, color='c', ls="-", linewidth=0.8)
+    plt.axhline(50 * 0.5, color='r', ls="-")
+    plt.plot(resultados[i], linewidth=1.3)
+    plt.xlabel("(Número de tiradas)")
+    plt.ylabel("Capital en el tiempo")
+    # Me ajustan los x e y
+    ax = plt.gca()
+    ax.relim()
+    ax.autoscale_view()
+    # Linea invisible para agregar legend
+    plt.axhline(50, color='w', ls="solid", visible=False)
+    dineroIni = 'Capital inicial: ' + str(50)
+    cincuentamas = ('Ganancia del 50%')
+    cincuentamenos = ('Pérdida del 50%:')
+    plt.legend((dineroIni, cincuentamas, cincuentamenos), loc="best")
+    plt.ioff()
+plt.show()
