@@ -1,4 +1,5 @@
 from random import randint
+from tkinter import N
 
 global apuesta_minima
 apuesta_minima = 0
@@ -167,4 +168,38 @@ class JugadorGuetting(Jugador):
                 self.fase_anterior()
             self.ultimo_resultado = False
 
+class JugadorFibonacci(Jugador):
+
+    def __init__(self, capital: float = 0, apuesta_ini: float = 1) -> None:
+        super().__init__(capital, apuesta_ini)
+        self.SerieFib = [i for i in self.fib()]
+        self.nivel = 0
+
+
+    def fib(self):
+        fibo = []
+        a, b = 0,1
+        cont= 1
+        yield 1
+        while cont<15:
+            n = a + b
+            a,b = b,n
+            cont+=1
+            yield n
+
+
+    def jugar(self, num: int)-> None:
+        self.apostar()
+        self.prox_apuesta = self.SerieFib[self.nivel]
+        if(self.gana_apuesta(num)):
+            self.capital+=self.prox_apuesta
+            if(self.nivel>=2):
+                self.nivel-= 2
+            else:
+                self.nivel=0
+        else:
+            self.capital-=self.prox_apuesta
+            if(self.nivel<14):
+                self.nivel+=1
+        
 

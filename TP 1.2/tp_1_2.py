@@ -1,6 +1,6 @@
 from clases import negros, rojos, randint, apuesta_minima, JugadorMG, JugadorParoli, JugadorGuetting
 from matplotlib import pyplot as plt
-
+plt.style.use('ggplot')
 
 def graficoDineroUnicaTirada(resultados, capAcotado):
     plt.title("Metodo Guetting- Flujo de dinero respecto a n tiradas")
@@ -59,21 +59,11 @@ def tirada() -> int:
 
 valorApuesta = 50  # Valor de la apuesta
 valorApuestaIdeal = valorApuesta * 100
-capAcotado = 1000  # Capital acotado
+capAcotado = 50  # Capital acotado
 capIdeal = 200000  # Capital ideal
 
 t = 100  # número de tiradas
 c = 10  # número de corridas
-
-
-
-dineroMartinGalaAcotado = [[0 for x in range(t)] for y in range(c)]
-frecRelativasMG = []
-dineroMartinGalaAcotadM = [[0 for x in range(t)] for y in range(c)]
-
-dineroguetting = [[0 for x in range(t)] for y in range(c)]
-dineroFibonacciIdeal = [[0 for x in range(t)] for y in range(c)]
-dineroFibonacciX100Ideal = [[0 for x in range(t)] for y in range(c)]
 
 
 apuesta_minima = 1

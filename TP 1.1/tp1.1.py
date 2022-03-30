@@ -18,9 +18,9 @@ esperanza= np.arange(0, 37).mean()  #Media aritmética
 desvio= np.arange(0, 37).std() #Desviación Estándar
 varianza= np.arange(0, 37).var() #Varianza
 
-t = 100 #número de tiradas
-c = 10 #número de corridas
-nroEvaluar = np.random.randint(0,37)
+t = 30 #número de tiradas
+c = 1 #número de corridas
+nroEvaluar = 5 #np.random.randint(0,37)
 
 
 frecuencias= [[0 for x in range(t)] for y in range(c)]
@@ -79,3 +79,28 @@ for ax in axs.flat:
 
 
 plt.show()
+
+"""def graficoProm(resultados, capAcotado):
+    plt.title("Distribucion de medias muestrales")
+    plt.axhline(capAcotado, color='k', ls="solid")
+    plt.plot(resultados, linewidth=1.2)
+    plt.xlabel("")
+    plt.ylabel("")
+    # Me ajustan los x e y
+    ax = plt.gca()
+    ax.relim()
+    ax.autoscale_view()
+    # Linea invisible para agregar legend
+    plt.axhline(50, color='w', ls="solid", visible=False)
+    #dineroIni = 'Capital inicial: ' + str(capAcotado)
+    #dineroFin = (f'Capital Final{resultados[-1]}')
+    #plt.legend((dineroIni, dineroFin), loc="best")
+    plt.ioff()
+    plt.show()
+
+prom_med=[]
+listas_medias=[]
+for i in medias:
+    listas_medias.append(i[-1])
+
+graficoProm(resultados=prom_med, capAcotado=0)"""

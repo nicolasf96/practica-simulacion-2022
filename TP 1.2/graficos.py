@@ -191,7 +191,7 @@ def graficaFrecFavorable(frecuencias, title):
     plt.show()
 
 
-# MARTINGALA  -  1 CORRIDA
+# MARTINGALA  -  1 CORRIDA0
 dineroMartinGalaAcotado = martinGala(valorApuesta,capAcotado,t,1)
 graficaFrecFavorable(dineroMartinGalaAcotado[1],"Frecuencia Relativa - Martingala")
 

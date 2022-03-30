@@ -176,3 +176,4 @@ plt.xlabel('tiradas')
 
 
 plt.show()
+
