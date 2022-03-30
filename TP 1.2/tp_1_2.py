@@ -2,7 +2,7 @@ from clases import negros, rojos, randint, apuesta_minima, JugadorMG, JugadorPar
 import matplotlib as plt
 
 
-def graficoDineroUnicaTirada(dineroTiempo, titulo,dineroInicial):
+def graficoDineroUnicaTirada(dineroTiempo, titulo, dineroInicial):
     plt.title(titulo)
     plt.axhline(dineroInicial, color='k', ls="solid")
     plt.plot(dineroTiempo[0], linewidth=1.2)
@@ -12,15 +12,16 @@ def graficoDineroUnicaTirada(dineroTiempo, titulo,dineroInicial):
     ax = plt.gca()
     ax.relim()
     ax.autoscale_view()
-    plt.axhline(dineroInicial,color='w', ls="solid",visible=False) #Linea invisible para agregar legend
+    # Linea invisible para agregar legend
+    plt.axhline(dineroInicial, color='w', ls="solid", visible=False)
     dineroIni = 'Capital inicial: ' + str(dineroInicial)
-    dineroFin=('Capital Final: ' + str(dineroTiempo[0][t-1]))
-    plt.legend((dineroIni,dineroFin), loc="best")
+    dineroFin = ('Capital Final: ' + str(dineroTiempo[0][t-1]))
+    plt.legend((dineroIni, dineroFin), loc="best")
     plt.ioff()
     plt.show()
 
 
-def graficoDineroTiradasMultiples(dineroTiempo, titulo,dineroInicial):
+def graficoDineroTiradasMultiples(dineroTiempo, titulo, dineroInicial):
     for i in range(c):
         plt.title(titulo)
         plt.axhline(dineroInicial, color='k', ls="solid")
@@ -33,17 +34,19 @@ def graficoDineroTiradasMultiples(dineroTiempo, titulo,dineroInicial):
         ax = plt.gca()
         ax.relim()
         ax.autoscale_view()
-        plt.axhline(dineroInicial,color='w', ls="solid",visible=False) #Linea invisible para agregar legend
+        # Linea invisible para agregar legend
+        plt.axhline(dineroInicial, color='w', ls="solid", visible=False)
         dineroIni = 'Capital inicial: ' + str(dineroInicial)
-        cincuentamas =('Ganancia del 50%')
+        cincuentamas = ('Ganancia del 50%')
         cincuentamenos = ('Pérdida del 50%:')
-        plt.legend((dineroIni,cincuentamas,cincuentamenos), loc="best")
+        plt.legend((dineroIni, cincuentamas, cincuentamenos), loc="best")
         plt.ioff()
     plt.show()
 
-def graficaFrecFavorable(frecuencias, title):
-    plt.title(title)
-    plt.bar(range(0,len(frecuencias)),frecuencias)
+
+def graficaFrecFavorable(frecuencias, title1):
+    plt.title(title1)
+    plt.bar(range(0, len(frecuencias)), frecuencias)
     plt.ylabel('Frec. Relativa de apuesta favorable')
     plt.ylim(0, 1)
     plt.xlabel('n (número de tiradas)')
@@ -54,36 +57,55 @@ def tirada() -> int:
     return randint(0, 36)
 
 
-
-
 # dineroMartinGalaAcotado= [[0 for x in range(t)] for y in range(c)]
 # frecRelativasMG = []
 # dineroMartinGalaAcotadM= [[0 for x in range(t)] for y in range(c)]
 
 
-
-
-valorApuesta = 50 #Valor de la apuesta
+valorApuesta = 50  # Valor de la apuesta
 valorApuestaIdeal = valorApuesta * 100
-capAcotado = 1000 #Capital acotado
-capIdeal = 200000 #Capital ideal
+capAcotado = 1000  # Capital acotado
+capIdeal = 200000  # Capital ideal
 
-t = 100 #número de tiradas
-c = 10 #número de corridas
+t = 100  # número de tiradas
+c = 10  # número de corridas
 
-#Estrategia Martingala
-#Tomamos como ganadores a los numeros pares
+# Estrategia Martingala
+# Tomamos como ganadores a los numeros pares
 
 
-dineroMartinGalaAcotado= [[0 for x in range(t)] for y in range(c)]
+dineroMartinGalaAcotado = [[0 for x in range(t)] for y in range(c)]
 frecRelativasMG = []
-dineroMartinGalaAcotadM= [[0 for x in range(t)] for y in range(c)]
+dineroMartinGalaAcotadM = [[0 for x in range(t)] for y in range(c)]
 
-dineroMartinGalaIdeal= [[0 for x in range(t)] for y in range(c)]
-dineroFibonacciIdeal= [[0 for x in range(t)] for y in range(c)]
-dineroFibonacciX100Ideal= [[0 for x in range(t)] for y in range(c)]
+dineroguetting = [[0 for x in range(t)] for y in range(c)]
+dineroFibonacciIdeal = [[0 for x in range(t)] for y in range(c)]
+dineroFibonacciX100Ideal = [[0 for x in range(t)] for y in range(c)]
 
-graficaFrecFavorable(dineroMartinGalaAcotado[1],"Frecuencia Relativa - Martingala")
-dineroMartinGalaIdeal =  martinGala(valorApuestaIdeal,capIdeal,t,c)
+graficaFrecFavorable(
+    dineroMartinGalaAcotado[1], "Frecuencia Relativa - Martingala")
+dineroMartinGalaIdeal = martinGala(valorApuestaIdeal, capIdeal, t, c)
 # graficoDineroUnicaTirada(dineroMartinGalaIdeal[0],'Estrategia Martingala',capIdeal)
 # graficoDineroTiradasMultiples(dineroMartinGalaIdeal[0],'MartinGala - Capital Ideal',capIdeal)
+
+apuesta_minima = 1
+j1 = JugadorGuetting(capital=10E5, apuesta_ini=1)
+guetting = []
+
+for i in range(10):
+    guetting.append(JugadorGuetting(capital=10E5, apuesta_ini=1))
+
+resultadosj1 = [j1.capital, ]
+
+"""for i in range(100):
+    n=tirada()
+    j1.jugar(n)
+    resultadosj1.append(j1.capital)
+    f=0
+    for jugador in guetting:
+        jugador.jugar(n)
+
+        f+=1"""
+
+graficoDineroUnicaTirada(dineroTiempo=resultadosj1,
+                         dineroInicial=10E5, titulo="abc")
