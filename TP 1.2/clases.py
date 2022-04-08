@@ -203,3 +203,8 @@ class JugadorFibonacci(Jugador):
             self.capital -= self.prox_apuesta
             if(self.nivel < 14):
                 self.nivel += 1
+
+
+
+
+#Comentario
