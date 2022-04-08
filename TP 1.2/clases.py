@@ -22,6 +22,7 @@ class Jugador:
         self.id = self.gen_id()
         self.capital = capital
         self.apuesta_0 = apuesta_ini
+        self.victorias = 0
 
     def apostar(self) -> None:
         """Se selecciona una tipo de apuesta entre par/impar, rojo/negro o primeros 18/ultimos 18"""
@@ -76,6 +77,7 @@ class JugadorMG(Jugador):
     def jugar(self, num: int) -> None:
         self.preparar_apuesta()
         if self.gana_apuesta(num):
+            self.victorias += 1
             self.capital += self.monto_prox_apuesta
             self.juegos_perdidos = 0  # se reinicia el martingala
             self.apostar()  # se cambia el elemento a apostar
@@ -111,6 +113,7 @@ class JugadorParoli(Jugador):
     def jugar(self, num: int) -> None:
         self.preparar_apuesta()
         if self.gana_apuesta(num):
+            self.victorias += 1
             self.capital += self.monto_prox_apuesta
             self.racha_positiva += 1
         else:
@@ -125,7 +128,6 @@ class JugadorGuetting(Jugador):
 
     def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
         super().__init__(capital, apuesta_ini)
-        self.victorias = 0
         self.nivel: int = 0
         self.fase: int = 0
         self.ultimo_resultado: bool = None
@@ -161,12 +163,13 @@ class JugadorGuetting(Jugador):
             if self.ultimo_resultado is True:
                 self.siguiente_fase()
             self.ultimo_resultado = True
-            self.victorias+=1
+            self.victorias += 1
         else:
             self.capital -= JugadorGuetting.grilla_de_apuestas[self.nivel][self.fase]
             if self.ultimo_resultado is False:
                 self.fase_anterior()
             self.ultimo_resultado = False
+
 
 class JugadorFibonacci(Jugador):
 
@@ -175,31 +178,28 @@ class JugadorFibonacci(Jugador):
         self.SerieFib = [i for i in self.fib()]
         self.nivel = 0
 
-
     def fib(self):
         fibo = []
-        a, b = 0,1
-        cont= 1
+        a, b = 0, 1
+        cont = 1
         yield 1
-        while cont<15:
+        while cont < 15:
             n = a + b
-            a,b = b,n
-            cont+=1
+            a, b = b, n
+            cont += 1
             yield n
 
-
-    def jugar(self, num: int)-> None:
+    def jugar(self, num: int) -> None:
         self.apostar()
         self.prox_apuesta = self.SerieFib[self.nivel]
         if(self.gana_apuesta(num)):
-            self.capital+=self.prox_apuesta
-            if(self.nivel>=2):
-                self.nivel-= 2
+            self.victorias += 1
+            self.capital += self.prox_apuesta
+            if(self.nivel >= 2):
+                self.nivel -= 2
             else:
-                self.nivel=0
+                self.nivel = 0
         else:
-            self.capital-=self.prox_apuesta
-            if(self.nivel<14):
-                self.nivel+=1
-        
-
+            self.capital -= self.prox_apuesta
+            if(self.nivel < 14):
+                self.nivel += 1

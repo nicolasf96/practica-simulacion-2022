@@ -1,9 +1,10 @@
-from clases import negros, rojos, randint, apuesta_minima, JugadorMG, JugadorParoli, JugadorGuetting
+from clases import Jugador, JugadorFibonacci, negros, rojos, randint, apuesta_minima, JugadorMG, JugadorParoli, JugadorGuetting
 from matplotlib import pyplot as plt
 plt.style.use('ggplot')
 
-def graficoDineroUnicaTirada(resultados, capAcotado):
-    plt.title("Metodo Guetting- Flujo de dinero respecto a n tiradas")
+
+def graficoDineroUnicaTirada(resultados: list, capAcotado: float, metodo: str) -> None:
+    plt.title(f"{metodo}- Flujo de dinero respecto a n tiradas")
     plt.axhline(capAcotado, color='k', ls="solid")
     plt.plot(resultados, linewidth=1.2)
     plt.xlabel("(Número de tiradas)")
@@ -21,9 +22,10 @@ def graficoDineroUnicaTirada(resultados, capAcotado):
     plt.show()
 
 
-def graficoDineroTiradasMultiples(resultados, capAcotado, corridas):
+def graficoDineroTiradasMultiples(resultados: list, capAcotado: float, corridas: int, metodo: str) -> None:
     for i in range(corridas):
-        plt.title(f"Metodo Guetting- Flujo de dinero de {corridas} apostadores respecto a n tiradas")
+        plt.title(
+            f"{metodo}- Flujo de dinero de {corridas} apostadores respecto a n tiradas")
         plt.axhline(capAcotado, color='k', ls="solid")
         plt.axhline(capAcotado * 1.5, color='c', ls="-", linewidth=0.8)
         plt.axhline(capAcotado * 0.5, color='r', ls="-")
@@ -44,8 +46,8 @@ def graficoDineroTiradasMultiples(resultados, capAcotado, corridas):
     plt.show()
 
 
-def graficaFrecFavorable(frecuencias, title1):
-    plt.title(title1)
+def graficaFrecFavorable(frecuencias: list, title1: str) -> None:
+    plt.title(f"Frecuencia relativa- {title1}")
     plt.bar(range(0, len(frecuencias)), frecuencias)
     plt.ylabel('Número de Jugadores')
     plt.ylim(0, 100)
@@ -66,38 +68,43 @@ t = 100  # número de tiradas
 c = 10  # número de corridas
 
 
-apuesta_minima = 1
-j1 = JugadorGuetting(capital=50, apuesta_ini=1)
-guetting = []
+def ejecutar(clase: Jugador, metodo: str):
+    """Genera todas las graficas"""
+    apuesta_minima = 1
 
-for i in range(100):
-    guetting.append(JugadorGuetting(capital=50, apuesta_ini=1))
+    j1 = clase(capital=50, apuesta_ini=1)
+    listado_jugadores = []
 
-resultadosj1 = [j1.capital, ]
+    for i in range(100):
+        listado_jugadores.append(clase(capital=50, apuesta_ini=1))
 
-for i in range(100):
-    n = tirada()
-    j1.jugar(n)
-    resultadosj1.append(j1.capital)
+    resultadosj1 = [j1.capital, ]
 
-resultados = []
-for jugador in guetting:
-    lista = []
     for i in range(100):
         n = tirada()
-        jugador.jugar(n)
-        lista.append(jugador.capital)
-    resultados.append(lista)
+        j1.jugar(n)
+        resultadosj1.append(j1.capital)
+
+    resultados = []
+    for jugador in listado_jugadores:
+        lista = []
+        for i in range(100):
+            n = tirada()
+            jugador.jugar(n)
+            lista.append(jugador.capital)
+        resultados.append(lista)
+
+    vic = [0 for i in range(100)]
+
+    for jugador in listado_jugadores:
+        vic[jugador.victorias-1] += 1
+
+    graficaFrecFavorable(vic, metodo)
+    graficoDineroUnicaTirada(resultadosj1, capAcotado, metodo)
+    graficoDineroTiradasMultiples(resultados, capAcotado, 100, metodo)
 
 
-
-vic = [0 for i in range(100)]
-
-for jugador in guetting:
-    vic[jugador.victorias-1]+=1
-
-graficaFrecFavorable(vic,"Frecuencia Relativa - Guetting")
-
-graficoDineroUnicaTirada(resultadosj1, capAcotado)
-
-graficoDineroTiradasMultiples(resultados, capAcotado, 100)
+#ejecutar(clase=JugadorGuetting, metodo="Metodo de Guetting")
+#ejecutar(clase=JugadorMG, metodo="Metodo Martin Gala")
+#ejecutar(clase=JugadorParoli, metodo="Metodo de Paroli")
+# ejecutar(clase=JugadorFibonacci, metodo="Metodo basado en Fibonacci") #La clase de fibonacci funciona mal
