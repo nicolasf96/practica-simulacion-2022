@@ -68,15 +68,18 @@ t = 100  # número de tiradas
 c = 10  # número de corridas
 
 
-def ejecutar(clase: Jugador, metodo: str):
-    """Genera todas las graficas"""
+def ejecutar(clase: Jugador, metodo: str, capital_acotado: bool = False):
+    """Genera todas las graficas
+    Se puede indicar si el capital es acotado o no, por defecto no es acotado
+    lo que significa que el jugador puede asumir perdidas"""
     apuesta_minima = 1
 
     j1 = clase(capital=50, apuesta_ini=1)
     listado_jugadores = []
 
     for i in range(100):
-        listado_jugadores.append(clase(capital=50, apuesta_ini=1))
+        listado_jugadores.append(
+            clase(capital=50, apuesta_ini=1, cap_acotado=capital_acotado))
 
     resultadosj1 = [j1.capital, ]
 
@@ -104,7 +107,7 @@ def ejecutar(clase: Jugador, metodo: str):
     graficoDineroTiradasMultiples(resultados, capAcotado, 100, metodo)
 
 
-#ejecutar(clase=JugadorGuetting, metodo="Metodo de Guetting")
-#ejecutar(clase=JugadorMG, metodo="Metodo Martin Gala")
-#ejecutar(clase=JugadorParoli, metodo="Metodo de Paroli")
-#ejecutar(clase=JugadorFibonacci, metodo="Metodo basado en Fibonacci")
+#ejecutar(clase=JugadorGuetting, metodo="Metodo de Guetting", capital_acotado=False)
+#ejecutar(clase=JugadorMG, metodo="Metodo Martin Gala", capital_acotado=True)
+#ejecutar(clase=JugadorParoli, metodo="Metodo de Paroli", capital_acotado=True)
+#ejecutar(clase=JugadorFibonacci, metodo="Metodo basado en Fibonacci", capital_acotado=True)

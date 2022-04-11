@@ -18,11 +18,12 @@ class Jugador:
         cls._last_id += 1
         return cls._last_id
 
-    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
+    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima, cap_acotado: bool = False) -> None:
         self.id = self.gen_id()
         self.capital = capital
         self.apuesta_0 = apuesta_ini
         self.victorias = 0
+        self.cap_acotado = cap_acotado
 
     def apostar(self) -> None:
         """Se selecciona una tipo de apuesta entre par/impar, rojo/negro o primeros 18/ultimos 18"""
@@ -56,69 +57,68 @@ class JugadorMG(Jugador):
     """Jugadores que siguen metodo martingala. 
     Cada apuesta seguira aleatoriamente negro/rojo o [1-18]/[19-36] o par/impar"""
 
-    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
+    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima, cap_acotado: bool = False) -> None:
         """La apuesta inicial es por defecto la minima"""
-        super().__init__(capital, apuesta_ini)
+        super().__init__(capital, apuesta_ini, cap_acotado)
         self.juegos_perdidos = 0
         self.apostar()  # se mantiene la apuesta hasta ganar
 
     def preparar_apuesta(self) -> None:
         """Se selecciona el monto a apostar"""
         apuesta = self.apuesta_0*(2**self.juegos_perdidos)
-
-        if apuesta <= self.capital:
+        if not(self.cap_acotado and apuesta > self.capital):
             self.monto_prox_apuesta = apuesta
         elif self.capital >= apuesta_minima:
             # se abandona temporalmente el sistema cuando ya no se posee el monto indicado por martngala
             self.monto_prox_apuesta = self.capital  # y se apuesta lo que se tiene
         else:
-            self.monto_prox_apuesta = 0  # se deja de apostar cuando el capital se termina
+            self.monto_prox_apuesta = 0   # se deja de apostar cuando el capital se termina
 
     def jugar(self, num: int) -> None:
         self.preparar_apuesta()
-        if self.gana_apuesta(num):
-            self.victorias += 1
-            self.capital += self.monto_prox_apuesta
-            self.juegos_perdidos = 0  # se reinicia el martingala
-            self.apostar()  # se cambia el elemento a apostar
-        else:
-            self.capital -= self.monto_prox_apuesta
-            self.juegos_perdidos += 1
+        if self.monto_prox_apuesta != 0:
+            if self.gana_apuesta(num):
+                self.victorias += 1
+                self.capital += self.monto_prox_apuesta
+                self.juegos_perdidos = 0  # se reinicia el martingala
+                self.apostar()  # se cambia el elemento a apostar
+            else:
+                self.capital -= self.monto_prox_apuesta
+                self.juegos_perdidos += 1
 
 
 class JugadorParoli(Jugador):
     """Jugadores que siguen metodo Paroli
     Cada apuesta seguira aleatoriamente negro/rojo o [1-18]/[19-36] o par/impar"""
 
-    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
+    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima, cap_acotado: bool = False) -> None:
         """La apuesta inicial es por defecto la minima"""
-        super().__init__(capital, apuesta_ini)
+        super().__init__(capital, apuesta_ini, cap_acotado)
         self.racha_positiva = 0
 
     def preparar_apuesta(self) -> None:
         # se selecciona el monto a apostar
         apuesta = self.apuesta_0*(2**self.racha_positiva)
-
-        if apuesta <= self.capital:
+        if not(self.cap_acotado and apuesta > self.capital):
             self.monto_prox_apuesta = apuesta
         elif self.capital >= apuesta_minima:
             # se abandona temporalmente el sistema cuando ya no se posee el monto indicado por Paroli
             self.monto_prox_apuesta = self.capital  # y se apuesta lo que se tiene
         else:
-            self.monto_prox_apuesta = 0  # se deja de apostar cuando el capital se termina
-
+            self.monto_prox_apuesta = 0   # se deja de apostar cuando el capital se termina
         # se selecciona la forma de apuesta
         self.apostar()
 
     def jugar(self, num: int) -> None:
         self.preparar_apuesta()
-        if self.gana_apuesta(num):
-            self.victorias += 1
-            self.capital += self.monto_prox_apuesta
-            self.racha_positiva += 1
-        else:
-            self.capital -= self.monto_prox_apuesta
-            self.racha_positiva = 0
+        if self.monto_prox_apuesta != 0:
+            if self.gana_apuesta(num):
+                self.victorias += 1
+                self.capital += self.monto_prox_apuesta
+                self.racha_positiva += 1
+            else:
+                self.capital -= self.monto_prox_apuesta
+                self.racha_positiva = 0
 
 
 class JugadorGuetting(Jugador):
@@ -126,8 +126,8 @@ class JugadorGuetting(Jugador):
     grilla_de_apuestas = ((2,), (3, 4, 6), (8, 12, 16),
                           (20, 30, 40), (60, 80, 100))
 
-    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima) -> None:
-        super().__init__(capital, apuesta_ini)
+    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima, cap_acotado: bool = False) -> None:
+        super().__init__(capital, apuesta_ini, cap_acotado)
         self.nivel: int = 0
         self.fase: int = 0
         self.ultimo_resultado: bool = None
@@ -158,23 +158,25 @@ class JugadorGuetting(Jugador):
 
     def jugar(self, num: int) -> None:
         self.apostar()
-        if self.gana_apuesta(num):
-            self.capital += JugadorGuetting.grilla_de_apuestas[self.nivel][self.fase]
-            if self.ultimo_resultado is True:
-                self.siguiente_fase()
-            self.ultimo_resultado = True
-            self.victorias += 1
-        else:
-            self.capital -= JugadorGuetting.grilla_de_apuestas[self.nivel][self.fase]
-            if self.ultimo_resultado is False:
-                self.fase_anterior()
-            self.ultimo_resultado = False
+        # No se materializa la apuesta cuando el capital es acotado
+        if not (self.cap_acotado and JugadorGuetting.grilla_de_apuestas[self.nivel][self.fase] >= self.capital):
+            if self.gana_apuesta(num):
+                self.capital += JugadorGuetting.grilla_de_apuestas[self.nivel][self.fase]
+                if self.ultimo_resultado is True:
+                    self.siguiente_fase()
+                self.ultimo_resultado = True
+                self.victorias += 1
+            else:
+                self.capital -= JugadorGuetting.grilla_de_apuestas[self.nivel][self.fase]
+                if self.ultimo_resultado is False:
+                    self.fase_anterior()
+                self.ultimo_resultado = False
 
 
 class JugadorFibonacci(Jugador):
 
-    def __init__(self, capital: float = 0, apuesta_ini: float = 1) -> None:
-        super().__init__(capital, apuesta_ini)
+    def __init__(self, capital: float = 0, apuesta_ini: float = 1, cap_acotado: bool = False) -> None:
+        super().__init__(capital, apuesta_ini, cap_acotado)
         self.SerieFib = [i for i in self.fib()]
         self.nivel = 0
 
@@ -192,17 +194,19 @@ class JugadorFibonacci(Jugador):
     def jugar(self, num: int) -> None:
         self.apostar()
         self.monto_prox_apuesta = self.SerieFib[self.nivel]
-        if(self.gana_apuesta(num)):
-            self.victorias += 1
-            self.capital += self.monto_prox_apuesta
-            if(self.nivel >= 2):
-                self.nivel -= 2
+        # No se materializa la apuesta cuando el capital es acotado
+        if not (self.cap_acotado and self.monto_prox_apuesta >= self.capital):
+            if(self.gana_apuesta(num)):
+                self.victorias += 1
+                self.capital += self.monto_prox_apuesta
+                if(self.nivel >= 2):
+                    self.nivel -= 2
+                else:
+                    self.nivel = 0
             else:
-                self.nivel = 0
-        else:
-            self.capital -= self.monto_prox_apuesta
-            if(self.nivel < 14):
-                self.nivel += 1
+                self.capital -= self.monto_prox_apuesta
+                if(self.nivel < 14):
+                    self.nivel += 1
 
 
 # Comentario
