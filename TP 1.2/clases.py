@@ -191,20 +191,18 @@ class JugadorFibonacci(Jugador):
 
     def jugar(self, num: int) -> None:
         self.apostar()
-        self.prox_apuesta = self.SerieFib[self.nivel]
+        self.monto_prox_apuesta = self.SerieFib[self.nivel]
         if(self.gana_apuesta(num)):
             self.victorias += 1
-            self.capital += self.prox_apuesta
+            self.capital += self.monto_prox_apuesta
             if(self.nivel >= 2):
                 self.nivel -= 2
             else:
                 self.nivel = 0
         else:
-            self.capital -= self.prox_apuesta
+            self.capital -= self.monto_prox_apuesta
             if(self.nivel < 14):
                 self.nivel += 1
 
 
-
-
-#Comentario
+# Comentario

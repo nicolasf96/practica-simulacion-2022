@@ -107,4 +107,4 @@ def ejecutar(clase: Jugador, metodo: str):
 #ejecutar(clase=JugadorGuetting, metodo="Metodo de Guetting")
 #ejecutar(clase=JugadorMG, metodo="Metodo Martin Gala")
 #ejecutar(clase=JugadorParoli, metodo="Metodo de Paroli")
-# ejecutar(clase=JugadorFibonacci, metodo="Metodo basado en Fibonacci") #La clase de fibonacci funciona mal
+#ejecutar(clase=JugadorFibonacci, metodo="Metodo basado en Fibonacci")
