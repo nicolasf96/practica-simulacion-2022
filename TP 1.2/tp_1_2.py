@@ -17,7 +17,7 @@ def graficoDineroUnicaTirada(resultados: list, capAcotado: float, metodo: str) -
     # Linea invisible para agregar legend
     plt.axhline(50, color='w', ls="solid", visible=False)
     dineroIni = 'Capital inicial: ' + str(capAcotado)
-    dineroFin = (f'Capital Final{resultados[-1]}')
+    dineroFin = (f'Capital Final: {resultados[-1]}')
     plt.legend((dineroIni, dineroFin), loc="best", prop={'size': 25})
     plt.xticks(fontsize=20)
     plt.yticks(fontsize=20)
@@ -94,15 +94,8 @@ def ejecutar(clase: Jugador, metodo: str, capital_acotado: bool = False):
     ultima_vic = 0
     for i in range(100):
         n = tirada()
-        #victorias_antes = j1.victorias
         j1.jugar(n)
-        #vict_n = j1.victorias-victorias_antes
-        # if vict_n >= 1:
-        #    vic[(i+1)-ultima_vic] += 1
-        #    ultima_vic = i+1
         resultadosj1.append(j1.capital)
-    # for i in range(len(vic)-1):
-    #    vic[i]/=100
     resultados = []
 
     for jugador in listado_jugadores:
@@ -120,10 +113,6 @@ def ejecutar(clase: Jugador, metodo: str, capital_acotado: bool = False):
         resultados.append(lista)
     for i in range(100):
         vic[i] /= (100**2)
-    """vic = [0 for i in range(100)]
-
-    for jugador in listado_jugadores:
-        vic[jugador.victorias-1] += 1"""
 
     graficaFrecFavorable(vic, metodo)
     graficoDineroUnicaTirada(resultadosj1, capAcotado, metodo)
@@ -133,11 +122,11 @@ def ejecutar(clase: Jugador, metodo: str, capital_acotado: bool = False):
 ejecutar(clase=JugadorMG, metodo="Sin restricciones de capital",capital_acotado=False)
 ejecutar(clase=JugadorMG, metodo="Con capital acotado", capital_acotado=True)
 
-#ejecutar(clase=JugadorFibonacci, metodo="Sin restricciones de capital", capital_acotado=False)
-#ejecutar(clase=JugadorFibonacci, metodo="Con capital acotado", capital_acotado=True)
+ejecutar(clase=JugadorFibonacci, metodo="Sin restricciones de capital", capital_acotado=False)
+ejecutar(clase=JugadorFibonacci, metodo="Con capital acotado", capital_acotado=True)
 
-#ejecutar(clase=JugadorGuetting, metodo="Sin restricciones de capital", capital_acotado=False)
-#ejecutar(clase=JugadorGuetting, metodo="Con capital acotado", capital_acotado=True)
+ejecutar(clase=JugadorGuetting, metodo="Sin restricciones de capital", capital_acotado=False)
+ejecutar(clase=JugadorGuetting, metodo="Con capital acotado", capital_acotado=True)
 
-#ejecutar(clase=JugadorColumnas, metodo="Sin restricciones de capital", capital_acotado=False)
-#ejecutar(clase=JugadorColumnas, metodo="Con capital acotado", capital_acotado=True)
+ejecutar(clase=JugadorColumnas, metodo="Sin restricciones de capital", capital_acotado=False)
+ejecutar(clase=JugadorColumnas, metodo="Con capital acotado", capital_acotado=True)
