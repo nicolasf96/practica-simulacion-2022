@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, random, shuffle
 from tkinter import N
 
 global apuesta_minima
@@ -207,6 +207,53 @@ class JugadorFibonacci(Jugador):
                 self.capital -= self.monto_prox_apuesta
                 if(self.nivel < 14):
                     self.nivel += 1
+
+
+class JugadorColumnas(Jugador):
+    """Jugadores que apuestan a todas las columnas"""
+    cols = ([1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34],
+            [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35],
+            [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36])
+
+    def __init__(self, capital: float = 0, apuesta_ini: float = apuesta_minima, cap_acotado: bool = False) -> None:
+        super().__init__(capital, apuesta_ini, cap_acotado)
+        self.minima = apuesta_ini
+        self.media = self.minima*2
+        self.maxima = self.media*2
+
+    def jugar(self, num: int) -> None:
+        """Establece a que columna se apuesta el minimo, a cual el doble(medio),
+        y a cual el cuadruple(maxima) y varia el capital de acuerdo a los resultados.
+        Al final de cada apuesta se duplican los montos a apostar en la proxima"""
+        indices = [0, 1, 2]
+        shuffle(indices)
+        idxmin, idxmed, idxmax = indices  # montos a apostar por col seleccionados
+        if self.cap_acotado:
+            if (self.maxima+self.media+self.minima) > self.capital:
+                # cuando no se pueden cubrir todas las columnas no se apuesta
+                return
+        if num in JugadorColumnas.cols[idxmax]:
+            self.capital += self.maxima
+        else:
+            self.capital -= self.maxima
+
+        if num in JugadorColumnas.cols[idxmed]:
+            self.capital += self.media
+        else:
+            self.capital -= self.media
+
+        if num in JugadorColumnas.cols[idxmin]:
+            self.capital += self.minima
+        else:
+            self.capital -= self.minima
+
+        # debido a que se apuestan todas las cols, siempre se gana(no implica que el flujo de capital sea positivo)
+        self.victorias += 1
+
+        # finalmente se duplican los montos para la prox apuesta
+        """self.minima *= 2
+        self.media *= 2
+        self.maxima *= 2"""
 
 
 # Comentario

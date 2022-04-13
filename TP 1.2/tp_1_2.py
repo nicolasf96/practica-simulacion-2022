@@ -1,4 +1,4 @@
-from clases import Jugador, JugadorFibonacci, negros, rojos, randint, apuesta_minima, JugadorMG, JugadorParoli, JugadorGuetting
+from clases import Jugador, JugadorFibonacci, negros, rojos, randint, apuesta_minima, JugadorMG, JugadorParoli, JugadorGuetting, JugadorColumnas
 from matplotlib import pyplot as plt
 plt.style.use('ggplot')
 
@@ -7,8 +7,8 @@ def graficoDineroUnicaTirada(resultados: list, capAcotado: float, metodo: str) -
     plt.title(f"{metodo}- Flujo de dinero respecto a n tiradas")
     plt.axhline(capAcotado, color='k', ls="solid")
     plt.plot(resultados, linewidth=1.2)
-    plt.xlabel("(Número de tiradas)")
-    plt.ylabel("Capital en el tiempo")
+    plt.xlabel("Número de tiradas 'n'")
+    plt.ylabel("Capital en 'n' tiradas")
     # Me ajustan los x e y
     ax = plt.gca()
     ax.relim()
@@ -27,11 +27,11 @@ def graficoDineroTiradasMultiples(resultados: list, capAcotado: float, corridas:
         plt.title(
             f"{metodo}- Flujo de dinero de {corridas} apostadores respecto a n tiradas")
         plt.axhline(capAcotado, color='k', ls="solid")
-        plt.axhline(capAcotado * 1.5, color='c', ls="-", linewidth=0.8)
-        plt.axhline(capAcotado * 0.5, color='r', ls="-")
+        #plt.axhline(capAcotado * 1.5, color='c', ls="-", linewidth=0.8)
+        #plt.axhline(capAcotado * 0.5, color='r', ls="-")
         plt.plot(resultados[i], linewidth=1.3)
-        plt.xlabel("(Número de tiradas)")
-        plt.ylabel("Capital en el tiempo")
+        plt.xlabel("Número de tiradas 'n'")
+        plt.ylabel("Capital en 'n' tiradas")
         # Me ajustan los x e y
         ax = plt.gca()
         ax.relim()
@@ -39,9 +39,10 @@ def graficoDineroTiradasMultiples(resultados: list, capAcotado: float, corridas:
         # Linea invisible para agregar legend
         plt.axhline(capAcotado, color='w', ls="solid", visible=False)
         dineroIni = 'Capital inicial: ' + str(capAcotado)
-        cincuentamas = ('Ganancia del 50%')
-        cincuentamenos = ('Pérdida del 50%:')
-        plt.legend((dineroIni, cincuentamas, cincuentamenos), loc="best")
+        #cincuentamas = ('Ganancia del 50%')
+        #cincuentamenos = ('Pérdida del 50%:')
+        #plt.legend((dineroIni, cincuentamas, cincuentamenos), loc="best")
+        plt.legend((dineroIni,), loc="best")
         plt.ioff()
     plt.show()
 
@@ -74,7 +75,7 @@ def ejecutar(clase: Jugador, metodo: str, capital_acotado: bool = False):
     lo que significa que el jugador puede asumir perdidas"""
     apuesta_minima = 1
 
-    j1 = clase(capital=50, apuesta_ini=1)
+    j1 = clase(capital=50, apuesta_ini=1, cap_acotado=capital_acotado)
     listado_jugadores = []
 
     for i in range(100):
@@ -107,7 +108,17 @@ def ejecutar(clase: Jugador, metodo: str, capital_acotado: bool = False):
     graficoDineroTiradasMultiples(resultados, capAcotado, 100, metodo)
 
 
-#ejecutar(clase=JugadorGuetting, metodo="Metodo de Guetting", capital_acotado=False)
-#ejecutar(clase=JugadorMG, metodo="Metodo Martin Gala", capital_acotado=True)
-#ejecutar(clase=JugadorParoli, metodo="Metodo de Paroli", capital_acotado=True)
-#ejecutar(clase=JugadorFibonacci, metodo="Metodo basado en Fibonacci", capital_acotado=True)
+#ejecutar(clase=JugadorMG, metodo="Metodo Martin Gala sin restricciones de capital", capital_acotado=False)
+#ejecutar(clase=JugadorMG, metodo="Metodo Martin Gala c/capital acotado", capital_acotado=True)
+
+#ejecutar(clase=JugadorParoli, metodo="Metodo de Paroli sin restricciones de capital", capital_acotado=False)
+#ejecutar(clase=JugadorParoli, metodo="Metodo de Paroli c/capital acotado", capital_acotado=True)
+
+#ejecutar(clase=JugadorFibonacci, metodo="Metodo basado en Fibonacci sin restricciones de capital", capital_acotado=False)
+#ejecutar(clase=JugadorFibonacci, metodo="Metodo basado en Fibonacci c/capital acotado", capital_acotado=True)
+
+#ejecutar(clase=JugadorGuetting, metodo="Metodo de Guetting sin restricciones de capital", capital_acotado=False)
+#ejecutar(clase=JugadorGuetting, metodo="Metodo de Guetting c/capital acotado", capital_acotado=True)
+
+ejecutar(clase=JugadorColumnas, metodo="Metodo de columnas sin restricciones de capital", capital_acotado=False)
+ejecutar(clase=JugadorColumnas, metodo="Metodo de columnas c/capital acotado", capital_acotado=True)
