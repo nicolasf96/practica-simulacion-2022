@@ -234,6 +234,7 @@ class JugadorColumnas(Jugador):
                 return
         if num in JugadorColumnas.cols[idxmax]:
             self.capital += self.maxima
+            self.victorias += 1
         else:
             self.capital -= self.maxima
 
@@ -246,9 +247,6 @@ class JugadorColumnas(Jugador):
             self.capital += self.minima
         else:
             self.capital -= self.minima
-
-        # debido a que se apuestan todas las cols, siempre se gana(no implica que el flujo de capital sea positivo)
-        self.victorias += 1
 
         # finalmente se duplican los montos para la prox apuesta
         """self.minima *= 2
