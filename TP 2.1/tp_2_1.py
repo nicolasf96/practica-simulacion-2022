@@ -1,4 +1,4 @@
-from generadores import glc
+from generadores import glc, media_cuadrados, generadorNumpy
 
 
 
