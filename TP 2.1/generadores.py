@@ -24,7 +24,7 @@ class glc:
         next = self.seed
         for i in range(self.n):
             next= (self.a*next + self.c)%self.m
-            self.numbers.append(next)
+            self.numbers.append(next/self.m)
         return self.numbers
 
 
