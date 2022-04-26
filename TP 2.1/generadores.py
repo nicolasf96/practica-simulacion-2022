@@ -1,4 +1,5 @@
 import numpy as np
+import math 
 
 
 
@@ -23,7 +24,7 @@ class glc:
     def generate(self):
         next = self.seed
         for i in range(self.n):
-            next= (self.a*next + self.c)%self.m
+            next= ((self.a*next) + self.c)%self.m
             self.numbers.append(next/self.m)
         return self.numbers
 
@@ -32,20 +33,19 @@ class glc:
 # Forma --> 
 class media_cuadrados:
 
-    numbers=[]
-
     def __init__(self, seed, n):
         self.seed = seed
         self.n = n
 
     def generate(self):
         seeds = []
+        values = []
         seeds.append(self.seed)
         for i in range(self.n):
-            num=int(str(seeds[i]**2).zfill(8)[2:6])
+            values.append(seeds[i]**2)
+            num=int(str(values[i]).zfill(8)[2:6])
             seeds.append(num)
-            self.numbers.append(seeds**2)
-        return self.numbers
+        return values
 
 
 # Generador Números Pseudo Aleatorios de Numpy

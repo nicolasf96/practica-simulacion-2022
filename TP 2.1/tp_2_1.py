@@ -1,4 +1,5 @@
 from generadores import glc, media_cuadrados, generadorNumpy
+import tests
 
 
 # Generador Congruencial Lineal (GCL)
@@ -7,8 +8,13 @@ from generadores import glc, media_cuadrados, generadorNumpy
 # Multiplicador 0 <= a <= m
 # Incremento c <= m
 # Semilla 0 <= X sub0 <= m
-generator = glc(35, 12, 15, 87, 20)
 
-numbers = generator.generate()
+generatorGLC = glc(64, 15, 12, 87, 100)
+numbersGLC = generatorGLC.generate()
 
-print(numbers)
+generatorMC = media_cuadrados(1931,100)
+numbersMediaCuadrados = generatorMC.generate()
+
+numbersNumpy = generadorNumpy(100)
+
+print(numbersMediaCuadrados)
