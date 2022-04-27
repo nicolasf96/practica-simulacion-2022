@@ -1,5 +1,6 @@
 from generadores import glc, media_cuadrados, generadorNumpy
 import tests
+import matplotlib.pyplot as plt
 
 
 # Generador Congruencial Lineal (GCL)
@@ -9,12 +10,26 @@ import tests
 # Incremento c <= m
 # Semilla 0 <= X sub0 <= m
 
-generatorGLC = glc(64, 15, 12, 87, 100)
+generatorGLC = glc(64, 15, 12, 87, 1000)
 numbersGLC = generatorGLC.generate()
 
-generatorMC = media_cuadrados(1931,100)
+generatorMC = media_cuadrados(9713,1000)
 numbersMediaCuadrados = generatorMC.generate()
 
-numbersNumpy = generadorNumpy(100)
+numbersNumpy = generadorNumpy(1000)
 
-print(numbersMediaCuadrados)
+print(numbersGLC)
+
+plt.scatter(numbersNumpy,numbersGLC)
+plt.show()
+
+'''
+fig=plt.figure()
+ax=fig.add_axes([0,0,1,1])
+ax.scatter(numbersNumpy, numbersMediaCuadrados, color='b')
+ax.set_xlabel('0 a n')
+ax.set_ylabel('0 <= x <= 1')
+ax.set_title('Plot')
+plt.show()
+
+'''
