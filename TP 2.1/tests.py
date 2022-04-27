@@ -12,6 +12,8 @@ from math import sqrt
 #q -> intervalo de confianza (100 - %confianza)
 #df -> grados de libertad
 def ChiCuadradoTest(numerosPseudoaleatorios,q,df):
+    '''
+    '''
     numbers = numerosPseudoaleatorios
     #Frecuencia observada en intervalos definidos (bins)
     #np.histogram() -> Devuelve dos matrices: hist y bin_edges. 
@@ -28,6 +30,7 @@ def ChiCuadradoTest(numerosPseudoaleatorios,q,df):
     # Al final obtengo un número de chi**2
     chi2_num = sum(chi2_list)
 
+
     # Este número lo debo comparar en la tabla de contingencia de chi2
     # Si es mayor al valor establecido en la tabla, dado un intervalo de confianza (q) y grados de libertad (df) -> entonces no cumple
 
@@ -39,5 +42,5 @@ def ChiCuadradoTest(numerosPseudoaleatorios,q,df):
     else:
         resultado = False
 
-    return  resultado
+    return  resultado, chi2_list, chi2_num
 
