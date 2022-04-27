@@ -1,27 +1,29 @@
 from generadores import glc, media_cuadrados, generadorNumpy, generadorNumpy
+from tests import ChiCuadradoTest
 import matplotlib.pyplot as plt
 import scipy
 import scipy.stats as ss
 from scipy.stats import chisquare
-"""
-Tests para evaluar uniformidad e independencia de los generadores de números aleatorios
- 
-Pueden ser:
-• Teóricos: los que trabajan con la expresión del generado, para evaluar a los generados si los
-números que generaría son uniformes e independientes
-• Empíricos: aquellos que trabajan con los números obtenidos del generador para verificar
-esas propiedades.
-"""
+
+
+
+#Definición de variables
+# n -> Cantidad de números pseudoaleatorios a generar
 n=10000
-numbers = glc(7, 5**15, 3, 2**35, n).generate()
+numbersGLC = glc(1234, 134775813, 1, 2**32, n).generate()
 numbersMedia= media_cuadrados(9751, n).generate()
-numbersNumpy= generadorNumpy(n)
 numbersPython= generadorNumpy(n)
-print(numbers)
+print(numbersGLC)
 print(numbersMedia)
-print(numbersNumpy)
 print(numbersPython)
- 
+
+#Tests
+result_chi2_glc = ChiCuadradoTest(numbersGLC, 0.95, 9)
+print(result_chi2_glc)
+
+
+
+'''
 fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[9, 6])
  
  
@@ -74,3 +76,5 @@ for i in range(k):
 print('Valor chi cuadrado de la muestra Python:',chisquare(frec_absoluta, f_exp = frec_esp))
  
 plt.show()
+'''
+ 

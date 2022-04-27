@@ -55,4 +55,3 @@ def generadorNumpy(n):
    for i in range(n):
        numbers.append(np.random.uniform(0, 1))
    return numbers
-
