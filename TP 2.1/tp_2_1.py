@@ -105,3 +105,11 @@ else:
     resultado = False
 print(resultado)
 plt.show()
+
+
+plt.scatter(range(n) , numbersGLC, c="black")
+plt.show()
+plt.scatter(range(n) , numbersMedia, c="black")
+plt.show()
+plt.scatter(range(n) , numbersPython, c="black")
+plt.show()

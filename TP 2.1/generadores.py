@@ -55,3 +55,14 @@ def generadorNumpy(n):
    for i in range(n):
        numbers.append(np.random.uniform(0, 1))
    return numbers
+
+def generadorRandomOrg(n):
+    numbers = []
+    url = 'https://www.random.org/decimal-fractions/?num=10000&dec=10&col=1&format=plain&rnd=new'
+    response = requests.get(url).text
+    for i in response.split("\n"):
+        try:
+            numbers.append(float(i))
+        except:
+            pass
+    return numbers
