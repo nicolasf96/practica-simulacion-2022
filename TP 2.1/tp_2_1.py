@@ -10,11 +10,19 @@ from scipy.stats import chisquare
 #Definición de variables
 # n -> Cantidad de números pseudoaleatorios a generar
 n=10000
-numbersGLC = glc(1234, 134775813, 1, 2**32, n).generate()
-numbersMedia= media_cuadrados(5999, n).generate()
+seedGLC=6565
+a=25214903917
+c=11
+m=2**48
+seedMedia=7001
+numbersGLC = glc(seedGLC, a, c, m, n).generate()
+numbersMedia= media_cuadrados(seedMedia, n).generate()
 numbersPython= generadorNumpy(n)
+print('Numeros GLC')
 print(numbersGLC)
+print('Numeros Media')
 print(numbersMedia)
+print('Numeros Python')
 print(numbersPython)
 
 
@@ -29,11 +37,12 @@ print(result_chi2_glc[2])
 
 
 
+#graficos
 
 fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[9, 6])
  
  
-axs[0, 0].set_title('Histograma GCL')
+axs[0, 0].set_title(f'Histograma GCL con parametros Java semilla:{seedGLC}')
 axs[0, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
 frec_absoluta,x,c= axs[0, 0].hist(numbersGLC,  edgecolor='black')
 print('Frecuencia absoluta intervalos:',frec_absoluta)
@@ -60,7 +69,7 @@ print(resultado)
 #entre estas frecuencias el estadístico tomará un valor grande y, en consecuencia,
 #se rechazará la hipótesis nula
  
-axs[0, 1].set_title('Histograma Media Cuadrado')
+axs[0, 1].set_title(f'Histograma Media Cuadrado con semilla:{seedMedia}')
 axs[0, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
 frec_absoluta,x,c=axs[0, 1].hist(numbersMedia, edgecolor='black')
 print('Frecuencia absoluta intervalos:',frec_absoluta)
@@ -106,10 +115,15 @@ else:
 print(resultado)
 plt.show()
 
+#Diagramas de dispersion
+plt.title("Diagrama de dispersion numeros GLC")
+plt.scatter(range(n) , numbersGLC, c="black", s=1)
+plt.show()
 
-plt.scatter(range(n) , numbersGLC, c="black")
+plt.title("Diagrama de dispersion numeros Media Cuadrado")
+plt.scatter(range(n) , numbersMedia, c="black", s=1)
 plt.show()
-plt.scatter(range(n) , numbersMedia, c="black")
-plt.show()
-plt.scatter(range(n) , numbersPython, c="black")
+
+plt.title("Diagrama de dispersion numeros Python")
+plt.scatter(range(n) , numbersPython, c="black", s=1)
 plt.show()

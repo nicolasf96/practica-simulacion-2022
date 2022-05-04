@@ -40,12 +40,14 @@ class media_cuadrados:
     def generate(self):
         seeds = []
         values = []
+        values2 =[]
         seeds.append(self.seed)
         for i in range(self.n):
             values.append(seeds[i]**2)
             num=int(str(values[i]).zfill(8)[2:6])
+            values2.append(float(f'0.{num}'))
             seeds.append(num)
-        return values
+        return values2
 
 
 # Generador Números Pseudo Aleatorios de Numpy
@@ -55,6 +57,7 @@ def generadorNumpy(n):
    for i in range(n):
        numbers.append(np.random.uniform(0, 1))
    return numbers
+
 
 def generadorRandomOrg(n):
     numbers = []
