@@ -1,129 +1,295 @@
 from generadores import glc, media_cuadrados, generadorNumpy, generadorNumpy
-from tests import ChiCuadradoTest
+from tests import ChiCuadradoTest, KolmogorovTest, testRacha
 import matplotlib.pyplot as plt
 import scipy
 import scipy.stats as ss
 from scipy.stats import chisquare
 
 
-
 #Definición de variables
 # n -> Cantidad de números pseudoaleatorios a generar
 n=10000
-seedGLC=6565
-a=25214903917
-c=11
-m=2**48
-seedMedia=7001
-numbersGLC = glc(seedGLC, a, c, m, n).generate()
-numbersMedia= media_cuadrados(seedMedia, n).generate()
-numbersPython= generadorNumpy(n)
-print('Numeros GLC')
-print(numbersGLC)
+seedGLC1=2500
+seedGLC2=2356
+seedGLC3=6512
+seedGLC4=6565
+seedMedia1= 2500
+seedMedia2= 3256
+seedMedia3= 5999
+seedMedia4= 7001
+numbersGLCC1 = glc(seedGLC1, a= 22695477, c= 1, m= 2**32, n=n).generate()
+numbersGLCC2 = glc(seedGLC2, a= 22695477, c= 1, m= 2**32, n=n).generate()
+numbersGLCC3 = glc(seedGLC3, a= 22695477, c= 1, m= 2**32, n=n).generate()
+numbersGLCC4 = glc(seedGLC4, a= 22695477, c= 1, m= 2**32, n=n).generate()
+numbersGLCJava1 = glc(seedGLC1, a= 25214903917, c= 11, m= 2**48, n=n).generate()
+numbersGLCJava2 = glc(seedGLC2, a= 25214903917, c= 11, m= 2**48, n=n).generate()
+numbersGLCJava3 = glc(seedGLC3, a= 25214903917, c= 11, m= 2**48, n=n).generate()
+numbersGLCJava4 = glc(seedGLC4, a= 25214903917, c= 11, m= 2**48, n=n).generate()
+numbersMedia1= media_cuadrados(seedMedia1, n=n).generate()
+numbersMedia2= media_cuadrados(seedMedia2, n=n).generate()
+numbersMedia3= media_cuadrados(seedMedia3, n=n).generate()
+numbersMedia4= media_cuadrados(seedMedia4, n=n).generate()
+numbersPython1= generadorNumpy(n)
+numbersPython2= generadorNumpy(n)
+numbersPython3= generadorNumpy(n)
+numbersPython4= generadorNumpy(n)
+
+#Numeros pseudoaleatorios
+print('Numeros GLC C')
+print(f'Semilla{seedGLC1}')
+print(numbersGLCC1)
+print(f'Semilla{seedGLC2}')
+print(numbersGLCC2)
+print(f'Semilla{seedGLC3}')
+print(numbersGLCC3)
+print(f'Semilla{seedGLC4}')
+print(numbersGLCC4)
+
+print('Numeros GLC Java')
+print(f'Semilla{seedGLC1}')
+print(numbersGLCJava1)
+print(f'Semilla{seedGLC2}')
+print(numbersGLCJava2)
+print(f'Semilla{seedGLC3}')
+print(numbersGLCJava3)
+print(f'Semilla{seedGLC4}')
+print(numbersGLCJava4)
+
 print('Numeros Media')
-print(numbersMedia)
+print(f'Semilla{seedMedia1}')
+print(numbersMedia1)
+print(f'Semilla{seedMedia2}')
+print(numbersMedia2)
+print(f'Semilla{seedMedia3}')
+print(numbersMedia3)
+print(f'Semilla{seedMedia4}')
+print(numbersMedia4)
+
 print('Numeros Python')
-print(numbersPython)
-
-
-'''
-#Tests
-result_chi2_glc = ChiCuadradoTest(numbersPython, 0.95, 9)
-print(result_chi2_glc[0])
-print(result_chi2_glc[1])
-print(result_chi2_glc[2])
-'''
-
-
+print(numbersPython1)
+print(numbersPython2)
+print(numbersPython3)
+print(numbersPython4)
 
 
 #graficos
 
-fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[9, 6])
+fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
  
- 
-axs[0, 0].set_title(f'Histograma GCL con parametros Java semilla:{seedGLC}')
+#graficos hist GCL con C
+axs[0, 0].set_title(f'Histograma GCL con parametros C semilla:{seedGLC1}')
 axs[0, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
-frec_absoluta,x,c= axs[0, 0].hist(numbersGLC,  edgecolor='black')
-print('Frecuencia absoluta intervalos:',frec_absoluta)
-k= len(frec_absoluta)
-print('Cantidad intervalos: ', k)
-frec_esp = []
-for i in range(k):
-    frec_esp.append(n/k)
-chi2_num = chisquare(frec_absoluta, f_exp = frec_esp)
-print('Valor chi cuadrado de la muestra GLC:',chi2_num)
-chi2_table = ss.chi2.ppf(q=0.95, df=9)
-if chi2_num[0] < chi2_table:
-    resultado = True
-    print('PASA LA PRUEBA:')
-    print(chi2_num[0])
-    print('<')
-    print(chi2_table)
-else:
-    resultado = False
-print(resultado)
-#print('Valor chi cuadrado de la muestra GCL:',chisquare(frec_absoluta, f_exp = frec_esp))
-#Si existe concordancia perfecta entre las frecuencias observadas y las esperadas el
-#estadístico tomará un valor igual a 0; por el contrario, si existe una gran discrepancias
-#entre estas frecuencias el estadístico tomará un valor grande y, en consecuencia,
-#se rechazará la hipótesis nula
- 
-axs[0, 1].set_title(f'Histograma Media Cuadrado con semilla:{seedMedia}')
-axs[0, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
-frec_absoluta,x,c=axs[0, 1].hist(numbersMedia, edgecolor='black')
-print('Frecuencia absoluta intervalos:',frec_absoluta)
-k= len(frec_absoluta)
-print('Cantidad intervalos: ', k)
-frec_esp = []
-for i in range(k):
-    frec_esp.append(n/k)
-chi2_num = chisquare(frec_absoluta, f_exp = frec_esp)
-print('Valor chi cuadrado de la muestra Media Cuadrado:',chi2_num)
-chi2_table = ss.chi2.ppf(q=0.95, df=9)
-if chi2_num[0] < chi2_table:
-    resultado = True
-    print('PASA LA PRUEBA:')
-    print(chi2_num[0])
-    print('<')
-    print(chi2_table)
-else:
-    resultado = False
-print(resultado)
+axs[0, 0].hist(numbersGLCC1,  edgecolor='black')
 
- 
+axs[0, 1].set_title(f'Histograma GCL con parametros C semilla:{seedGLC2}')
+axs[0, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 1].hist(numbersGLCC2,  edgecolor='black')
+
+axs[1, 0].set_title(f'Histograma GCL con parametros C semilla:{seedGLC3}')
+axs[1, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 0].hist(numbersGLCC3,  edgecolor='black')
+
+axs[1, 1].set_title(f'Histograma GCL con parametros C semilla:{seedGLC4}')
+axs[1, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 1].hist(numbersGLCC4,  edgecolor='black')
+plt.show()
+#graficos dispersion GCL con C
+fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+axs[0, 0].set_title(f'Diagrama de dispersion numeros GLC C con semilla: {seedGLC1}')
+axs[0, 0].scatter(range(n), numbersGLCC1, c="black", s=1)
+axs[0, 1].set_title(f'Diagrama de dispersion numeros GLC C con semilla: {seedGLC2}')
+axs[0, 1].scatter(range(n), numbersGLCC2, c="black", s=1)
+axs[1, 0].set_title(f'Diagrama de dispersion numeros GLC C con semilla: {seedGLC3}')
+axs[1, 0].scatter(range(n), numbersGLCC3, c="black", s=1)
+axs[1, 1].set_title(f'Diagrama de dispersion numeros GLC C con semilla: {seedGLC4}')
+axs[1, 1].scatter(range(n), numbersGLCC4, c="black", s=1)
+
+plt.show()
+
+#graficos hist GCL con Java
+fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+axs[0, 0].set_title(f'Histograma GCL con parametros Java semilla:{seedGLC1}')
+axs[0, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 0].hist(numbersGLCJava1,  edgecolor='black')
+
+axs[0, 1].set_title(f'Histograma GCL con parametros Java semilla:{seedGLC2}')
+axs[0, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 1].hist(numbersGLCJava2,  edgecolor='black')
+
+axs[1, 0].set_title(f'Histograma GCL con parametros Java semilla:{seedGLC3}')
+axs[1, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 0].hist(numbersGLCJava3,  edgecolor='black')
+
+axs[1, 1].set_title(f'Histograma GCL con parametros Java semilla:{seedGLC4}')
+axs[1, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 1].hist(numbersGLCJava4,  edgecolor='black')
+plt.show()
+
+#graficos dispersion GCL con Java
+fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+axs[0, 0].set_title(f'Diagrama de dispersion numeros GLC C con semilla: {seedGLC1}')
+axs[0, 0].scatter(range(n), numbersGLCJava1, c="black", s=1)
+axs[0, 1].set_title(f'Diagrama de dispersion numeros GLC C con semilla: {seedGLC2}')
+axs[0, 1].scatter(range(n), numbersGLCJava2, c="black", s=1)
+axs[1, 0].set_title(f'Diagrama de dispersion numeros GLC C con semilla: {seedGLC3}')
+axs[1, 0].scatter(range(n), numbersGLCJava3, c="black", s=1)
+axs[1, 1].set_title(f'Diagrama de dispersion numeros GLC C con semilla: {seedGLC4}')
+axs[1, 1].scatter(range(n), numbersGLCJava4, c="black", s=1)
+plt.show()
+
+#graficos Media
+fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+axs[0, 0].set_title(f'Histograma Media Cuadrado con semilla:{seedMedia1}')
+axs[0, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 0].hist(numbersMedia1, edgecolor='black')
+
+axs[0, 1].set_title(f'Histograma Media Cuadrado con semilla:{seedMedia2}')
+axs[0, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 1].hist(numbersMedia2, edgecolor='black')
+
+axs[1, 0].set_title(f'Histograma Media Cuadrado con semilla:{seedMedia3}')
+axs[1, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 0].hist(numbersMedia3, edgecolor='black')
+
+axs[1, 1].set_title(f'Histograma Media Cuadrado con semilla:{seedMedia4}')
+axs[1, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 1].hist(numbersMedia4, edgecolor='black')
+plt.show()
+
+#graficos dispersion Media
+
+fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+axs[0, 0].set_title(f'Diagrama de dispersion numeros Media con semilla: {seedMedia1}')
+axs[0, 0].scatter(range(n) , numbersMedia1, c="black", s=1)
+axs[0, 1].set_title(f'Diagrama de dispersion numeros Media con semilla: {seedMedia2}')
+axs[0, 1].scatter(range(n) , numbersMedia2, c="black", s=1)
+axs[1, 0].set_title(f'Diagrama de dispersion numeros Media con semilla: {seedMedia3}')
+axs[1, 0].scatter(range(n) , numbersMedia3, c="black", s=1)
+axs[1, 1].set_title(f'Diagrama de dispersion numeros Media con semilla: {seedMedia4}')
+axs[1, 1].scatter(range(n) , numbersMedia4, c="black", s=1)
+plt.show()
+
+#graficos Python
+fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+axs[0, 0].set_title('Histograma Python')
+axs[0, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 0].hist(numbersPython1, edgecolor='black')
+
+axs[0, 1].set_title('Histograma Python')
+axs[0, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 1].hist(numbersPython2, edgecolor='black')
+
+axs[1, 0].set_title('Histograma Python')
+axs[1, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 0].hist(numbersPython3, edgecolor='black')
+
 axs[1, 1].set_title('Histograma Python')
 axs[1, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
-frec_absoluta,x,c=axs[1, 1].hist(numbersPython, edgecolor='black')
-print('Frecuencia absoluta intervalos:',frec_absoluta)
-k= len(frec_absoluta)
-print('Cantidad intervalos: ', k)
-frec_esp = []
-for i in range(k):
-    frec_esp.append(n/k)
-chi2_num = chisquare(frec_absoluta, f_exp = frec_esp)
-print('Valor chi cuadrado de la muestra Python:',chi2_num)
-chi2_table = ss.chi2.ppf(q=0.95, df=9)
-if chi2_num[0] < chi2_table:
-    resultado = True
-    print('PASA LA PRUEBA:')
-    print(chi2_num[0])
-    print('<')
-    print(chi2_table)
-else:
-    resultado = False
-print(resultado)
+axs[1, 1].hist(numbersPython4, edgecolor='black')
+
 plt.show()
 
-#Diagramas de dispersion
-plt.title("Diagrama de dispersion numeros GLC")
-plt.scatter(range(n) , numbersGLC, c="black", s=1)
+
+#graficos dispersion python
+
+fig, axs = plt.subplots(ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+axs[0, 0].set_title(f'Diagrama de dispersion Python')
+axs[0, 0].scatter(range(n) , numbersPython1, c="black", s=1)
+axs[0, 1].set_title(f'Diagrama de dispersion Python')
+axs[0, 1].scatter(range(n) , numbersPython2, c="black", s=1)
+axs[1, 0].set_title(f'Diagrama de dispersion Python')
+axs[1, 0].scatter(range(n) , numbersPython3, c="black", s=1)
+axs[1, 1].set_title(f'Diagrama de dispersion Python')
+axs[1, 1].scatter(range(n) , numbersPython4, c="black", s=1)
 plt.show()
 
-plt.title("Diagrama de dispersion numeros Media Cuadrado")
-plt.scatter(range(n) , numbersMedia, c="black", s=1)
-plt.show()
 
-plt.title("Diagrama de dispersion numeros Python")
-plt.scatter(range(n) , numbersPython, c="black", s=1)
-plt.show()
+#Prueba de test
+
+#Tests Chi cuadrado
+print('test chi cuadrado')
+print('Resultados NumerosGLC')
+print(ChiCuadradoTest(numbersGLCC1, 0.95, 9))
+print(ChiCuadradoTest(numbersGLCC2, 0.95, 9))
+print(ChiCuadradoTest(numbersGLCC3, 0.95, 9))
+print(ChiCuadradoTest(numbersGLCC4, 0.95, 9))
+
+print('Resultados NumerosMedia')
+print(ChiCuadradoTest(numbersMedia1, 0.95, 9))
+print(ChiCuadradoTest(numbersMedia2, 0.95, 9))
+print(ChiCuadradoTest(numbersMedia3, 0.95, 9))
+print(ChiCuadradoTest(numbersMedia4, 0.95, 9))
+
+print('Resultados Numeros Python')
+print(ChiCuadradoTest(numbersPython1, 0.95, 9))
+print(ChiCuadradoTest(numbersPython2, 0.95, 9))
+print(ChiCuadradoTest(numbersPython3, 0.95, 9))
+print(ChiCuadradoTest(numbersPython4, 0.95, 9))
+
+
+
+
+#Test de racha
+print('test de racha')
+print('Resultados NumerosGLCC')
+print(f'semilla: {seedGLC1}')
+testRacha(numbersGLCC1)
+print(f'semilla: {seedGLC2}')
+testRacha(numbersGLCC2)
+print(f'semilla: {seedGLC3}')
+testRacha(numbersGLCC3)
+print(f'semilla: {seedGLC3}')
+testRacha(numbersGLCC4)
+
+print('Resultados NumerosJava')
+print(f'semilla: {seedGLC1}')
+testRacha(numbersGLCJava1)
+print(f'semilla: {seedGLC2}')
+testRacha(numbersGLCJava2)
+print(f'semilla: {seedGLC3}')
+testRacha(numbersGLCJava3)
+print(f'semilla: {seedGLC3}')
+testRacha(numbersGLCJava4)
+
+print('Resultados NumerosMedia')
+print(f'semilla: {seedMedia1}')
+testRacha(numbersMedia1)
+print(f'semilla: {seedMedia2}')
+testRacha(numbersMedia2)
+print(f'semilla: {seedMedia3}')
+testRacha(numbersMedia3)
+print(f'semilla: {seedMedia4}')
+testRacha(numbersMedia4)
+
+print('Resultados Numeros Python')
+print(f'test de racha Python 1')
+testRacha(numbersPython1)
+print(f'test de racha Python 2')
+testRacha(numbersPython2)
+print(f'test de racha Python 3')
+testRacha(numbersPython3)
+print(f'test de racha Python 4')
+testRacha(numbersPython4)
+
+
+#Test KS
+print('Test KS java')
+print(KolmogorovTest(numbersGLCC1, 0.05))
+print(KolmogorovTest(numbersGLCC2, 0.05))
+print(KolmogorovTest(numbersGLCC3, 0.05))
+print(KolmogorovTest(numbersGLCC4, 0.05))
+print('Test KS java')
+print(KolmogorovTest(numbersGLCJava1, 0.05))
+print(KolmogorovTest(numbersGLCJava2, 0.05))
+print(KolmogorovTest(numbersGLCJava3, 0.05))
+print(KolmogorovTest(numbersGLCJava4, 0.05))
+print('Test KS media')
+print(KolmogorovTest(numbersMedia1, 0.05))
+print(KolmogorovTest(numbersMedia2, 0.05))
+print(KolmogorovTest(numbersMedia3, 0.05))
+print(KolmogorovTest(numbersMedia4, 0.05))
+print('Test KS media')
+print(KolmogorovTest(numbersPython1, 0.05))
+print(KolmogorovTest(numbersPython2, 0.05))
+print(KolmogorovTest(numbersPython3, 0.05))
+print(KolmogorovTest(numbersPython4, 0.05))

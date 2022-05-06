@@ -22,6 +22,7 @@ class glc:
 
 
     def generate(self):
+        self.numbers=[]
         next = self.seed
         for i in range(self.n):
             next= ((self.a*next) + self.c)%self.m

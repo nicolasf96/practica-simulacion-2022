@@ -4,7 +4,11 @@ import numpy as np
 from scipy.stats import ksone
 from scipy.stats import norm
 from math import sqrt
-
+import math
+import scipy
+import scipy.stats as ss
+from scipy.stats import chisquare
+import matplotlib.pyplot as plt
 
 
 #Parámetros:
@@ -12,24 +16,23 @@ from math import sqrt
 #q -> intervalo de confianza (100 - %confianza)
 #df -> grados de libertad
 def ChiCuadradoTest(numerosPseudoaleatorios,q,df):
-    '''
-    '''
+
     numbers = numerosPseudoaleatorios
     #Frecuencia observada en intervalos definidos (bins)
-    #np.histogram() -> Devuelve dos matrices: hist y bin_edges. 
-    f_obs = np.histogram(numbers, bins=(0,1,2,3,4,5,6,7,8,9,10))
-
+    #plt.hist() -> Devuelve la frecuencia absoluta de los 10 intervalo
+    f_obs, x, c = plt.hist(numerosPseudoaleatorios, edgecolor='black')
+    k=len(f_obs)
    #Frecuencia esperada en (bins) intervalos
-    f_esp = len(numbers)/10
+    f_esp = len(numbers)/k
 
     #Realizo el cálculo y la sumatoria de la fórmula de chi2
     chi2_list = []
     for i in range(10):
-        num = ((f_obs[0][i-1]- f_esp)**2)/f_esp
+        num = ((f_obs[i]- f_esp)**2)/f_esp
         chi2_list.append(num)
     # Al final obtengo un número de chi**2
     chi2_num = sum(chi2_list)
-
+    print('Valor chi cuadrado de la muestra GLC:', chi2_num)
 
     # Este número lo debo comparar en la tabla de contingencia de chi2
     # Si es mayor al valor establecido en la tabla, dado un intervalo de confianza (q) y grados de libertad (df) -> entonces no cumple
@@ -39,11 +42,63 @@ def ChiCuadradoTest(numerosPseudoaleatorios,q,df):
 
     if chi2_num < chi2_table:
         resultado = True
+        print('PASA LA PRUEBA:')
+        print(f'Valor chi2_num:{chi2_num} < Valor chi2 tabla:{chi2_table}')
     else:
         resultado = False
+        print('No PASA LA PRUEBA:')
+        print(f'Valor chi2_num:{chi2_num} < Valor chi2 tabla:{chi2_table}')
 
-    return  resultado, chi2_list, chi2_num
+    return  resultado, chi2_num, chi2_table
 
+#Test KS
+def KolmogorovTest(lista, alfa):
+    '''Test de Kolmogorov-Smirnov, compara el cdf de una distribucion uniforme con el cdf de la muestra de tamaño n, para el nivel de significancia alfa'''
+
+    lista.sort()  # Ordeno la lista de menor a mayor
+    d_positivo = []  # array de los valores calculados para d positivo con la fórmula de KS
+    d_negativo = []  # array de los valores calculados para d negativo con la fórmula de KS
+
+    for i in range(len(lista)):
+        d_positivo.append(i / len(lista) - lista[i])  # Fórmula de KS para d positivo
+        d_negativo.append(lista[i] - (i - 1) / len(lista))  # Fórmula de KS para d negativo
+
+    dmaximo = max(max(d_positivo), max(d_negativo))  # Calculo el máximo
+    k_tabla = ksone.ppf(1 - alfa / 2, len(lista))
+
+    if dmaximo < k_tabla:
+        return True
+    return False
+
+# NO FUNCIONA
+"""
+def calcular_subsecuencias(lista):
+    subsecuencias_menor_5 = 0
+    subsecuencias_mayor_6 = 0
+    n = len(lista)
+    for i in range(n - 1):
+        cant = 0
+        if lista[i] < lista[i + 1]:
+            j = i
+            while lista[j] < lista[j + 1] and j < n - 2:
+                cant += 1
+                j += 1
+            if cant <= 5:
+                subsecuencias_menor_5 += 1
+            else:
+                subsecuencias_mayor_6 += 1
+            i = j
+    print('Cantidas de subsecuencias crecientes de longitud <= 5:', subsecuencias_menor_5)
+    print('Cantidas de subsecuencias crecientes de longitud >= 6:', subsecuencias_mayor_6)
+    total_corridas = subsecuencias_menor_5 + subsecuencias_mayor_6
+    print('Total de subsecuencias corridas:', total_corridas)
+
+    H0 = "los números generados son independientes"
+    H1 = "los números generados no son independientes"
+    print('\nHipótesis 0:', H0)
+    print('\nHipótesis 1:', H1)
+
+<<<<<<< Updated upstream
 def KolmogorovTest(lista, alfa):
     '''Test de Kolmogorov-Smirnov, compara el cdf de una distribucion uniforme con el cdf de la muestra de tamaño n, para el nivel de significancia alfa'''
     
@@ -62,3 +117,85 @@ def KolmogorovTest(lista, alfa):
       return True
     return False
     
+=======
+    # Calculamos media y varianza del total de corridas
+
+    rv1 = ss.norm()  # Normal estándar
+    # tomamos alfa
+    alfa = 0.05
+    alfa_2 = alfa / 2
+    print('\nAlfa:', alfa)
+    print('Alfa sobre 2:', alfa_2)
+    Za2 = rv1.cdf(alfa_2)  # 1.96 #Z alfa/2
+    print('Z alfa sobre 2:', Za2)
+
+    mu = ((2 * n) - 1) / 3
+    print('Esperanza:', mu)
+    sigma2 = ((16 * n) - 29) / 90
+    print('Varianza:', sigma2)
+    sigma = math.sqrt(sigma2)
+    print('Desvío:', sigma, '\n')
+
+    # Si n > 0, por el TCL, la distribución se aproxima a una normal N(0,1)
+    Z0 = rv1.cdf(abs((total_corridas - mu) / sigma))
+    print('Z0:', Z0)
+
+    if Z0 < Za2:
+        generador_independiente = True
+        print('\nNo se puede rechazar la hipótesis de que los datos son independientes')
+    else:
+        generador_independiente = False
+        print('\nSe tiene evidencia de que los datos son dependientes, se rechaza el generador')
+    # return generador_independiente
+"""
+
+
+def testRacha(lista):
+    subsecuencias_menor_4 = 0
+    subsecuencias_mayor_4 = 0
+    n = len(lista)
+    n1=0
+    n2 = 0
+    for i in range(n - 1):
+        cant = 0
+        if lista[i] < lista[i + 1]:
+            j = i
+            while lista[j] < lista[j + 1] and j < n - 2:
+                cant += 1
+                j += 1
+            if cant <= 4:
+                subsecuencias_menor_4 += 1
+                n1+=cant
+            else:
+                subsecuencias_mayor_4 += 1
+                n2+=cant
+            i = j
+    print('n1=Cantidad de subsecuencias crecientes de longitud <= 2:', n1)
+    print('n2=Cantidad de subsecuencias crecientes de longitud > 2:', n2)
+    total_corridas = subsecuencias_menor_4 + subsecuencias_mayor_4 # R= total_corridas
+    print('Total de subsecuencias corridas:', total_corridas)
+
+    H0 = "los números generados son aleatoria"
+    H1 = "los números generados no son aleatoria"
+    print('\nHipótesis 0:', H0)
+    print('\nHipótesis 1:', H1)
+    if (subsecuencias_menor_4 != 0 and subsecuencias_mayor_4 != 0):
+        mu = ((2 * n1 * n2) / (n1 + n2)) + 1
+        print('Esperanza:', mu)
+        sigma2 = ((2 * n1 * n2) * ((2 * n1 * n2) - n1 - n2)) / (((n1 - n2) ** 2) * (n1 + n2 - 1))
+        print('Varianza:', sigma2)
+        sigma = math.sqrt(sigma2)
+        print('Desvío:', sigma, '\n')
+
+        Z0 = (total_corridas - mu) / sigma
+        print('Z0:', Z0)
+        Z = -1.9599  # estadistico con un error de 0.05
+        # El estadístico de prueba se acerca a una distribución normal si Z0>Z
+        if Z0 < Z:
+            print(
+                '\nNEl estadistico de prueba cae en zona de rechazo, no existe evidencia estadistica para apoyar la aleatoriedad de la muestra')
+        else:
+            print('\nEl estadistico de prueba cae en zona de aceptacion')
+    else:
+        print('Se rechaza propuesta numeros generados no aleatorios')
+>>>>>>> Stashed changes
