@@ -44,3 +44,21 @@ def ChiCuadradoTest(numerosPseudoaleatorios,q,df):
 
     return  resultado, chi2_list, chi2_num
 
+def KolmogorovTest(lista, alfa):
+    '''Test de Kolmogorov-Smirnov, compara el cdf de una distribucion uniforme con el cdf de la muestra de tamaño n, para el nivel de significancia alfa'''
+    
+    lista.sort() #Ordeno la lista de menor a mayor
+    d_positivo = [] #array de los valores calculados para d positivo con la fórmula de KS
+    d_negativo = [] #array de los valores calculados para d negativo con la fórmula de KS
+    
+    for i in range(len(lista)):
+        d_positivo.append(i/len(lista) - lista[i]) #Fórmula de KS para d positivo
+        d_negativo.append( lista[i]-(i-1)/len(lista)) #Fórmula de KS para d negativo
+        
+    dmaximo = max(max(d_positivo), max(d_negativo)) #Calculo el máximo
+    k_tabla=ksone.ppf(1-alfa/2, len(lista))
+    
+    if dmaximo < k_tabla:
+      return True
+    return False
+    
