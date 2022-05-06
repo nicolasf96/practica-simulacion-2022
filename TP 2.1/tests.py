@@ -198,4 +198,4 @@ def testRacha(lista):
             print('\nEl estadistico de prueba cae en zona de aceptacion')
     else:
         print('Se rechaza propuesta numeros generados no aleatorios')
->>>>>>> Stashed changes
+
