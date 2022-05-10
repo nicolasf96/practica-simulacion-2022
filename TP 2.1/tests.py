@@ -53,7 +53,7 @@ def ChiCuadradoTest(numerosPseudoaleatorios,q,df):
 
 #Test KS
 def KolmogorovTest(lista, alfa):
-    '''Test de Kolmogorov-Smirnov, compara el cdf de una distribucion uniforme con el cdf de la muestra de tamaño n, para el nivel de significancia alfa'''
+    '''Test de Kolmogorov-Smirnov, compara el cdf(valor crítico) de una distribucion uniforme con el cdf(d) de la muestra(lista) de tamaño n, para el nivel de significancia alfa. Devuelde verdadero si la distribución es uniforme, falso si no lo es.'''
 
     lista.sort()  # Ordeno la lista de menor a mayor
     d_positivo = []  # array de los valores calculados para d positivo con la fórmula de KS
@@ -63,12 +63,49 @@ def KolmogorovTest(lista, alfa):
         d_positivo.append(i / len(lista) - lista[i])  # Fórmula de KS para d positivo
         d_negativo.append(lista[i] - (i - 1) / len(lista))  # Fórmula de KS para d negativo
 
-    dmaximo = max(max(d_positivo), max(d_negativo))  # Calculo el máximo
-    k_tabla = ksone.ppf(1 - alfa / 2, len(lista))
+    dmaximo = max(max(d_positivo), max(d_negativo))  # Calculo el máximo entre los d
+    k_tabla = ksone.ppf(1 - alfa / 2, len(lista))  # Tomo el valor crítico d de la tabla de KS
 
-    if dmaximo < k_tabla:
+    if dmaximo < k_tabla:  # Comparo el valor d de la muestra con el valor crítico de la tabla
+        return f'dmax:{dmaximo} k_tabla:{k_tabla} pasa prueba '  # Hipotesis aceptada, distribucion es uniforme
+    return f'dmax:{dmaximo} k_tabla:{k_tabla} NO pasa prueba '  # Hipótesis rechazada, distribucion no es uniforme
+
+
+def AutocorrelationTest(lista, m, i, alfa):
+    '''Test de Autocorrelacion, no anda.'''
+
+    maxEntero = int(((len(lista) - i) / m)) - 1
+    muestra = []
+
+    for j in range(i, i + (maxEntero + 1) * m):
+        muestra.append(lista[j])
+    # muestra = [(lista[j]) for j in range(i , maxEntero)]
+
+    for k in range(maxEntero - m):
+        suma = (muestra[i + k * m] * muestra[i + (k + 1) * m])
+
+    rho = ((1 / (maxEntero + 1)) * suma) - 0.25
+    sigma = (sqrt(13 * (maxEntero + 7)) / (12 * (maxEntero + 1)))
+
+    zcompara = rho / sigma
+    ztabla = norm.ppf(1 - alfa / 2)
+
+    if -ztabla <= zcompara <= ztabla:
         return True
     return False
+
+
+def AutocorrelationTest2(x, n):
+    '''Test de Autocorrelacion. Devuelve un gráfico.'''
+
+    media_lista = np.mean(x)
+    c = lambda k: np.mean([(x[i] - media_lista) * (x[i + k] - media_lista) for i in range(n - k)])  # autocovariance
+    r = lambda k: c(k) / c(0)  # Autocorrelation
+
+    correlacion = [r(k) for k in range(100)]
+
+    plt.plot(correlacion)
+    plt.show()
 
 # NO FUNCIONA
 """
