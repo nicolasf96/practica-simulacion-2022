@@ -59,7 +59,7 @@ def generadorNumpy(n):
        numbers.append(np.random.uniform(0, 1))
    return numbers
 
-
+"""
 def generadorRandomOrg(n):
     numbers = []
     url = 'https://www.random.org/decimal-fractions/?num=10000&dec=10&col=1&format=plain&rnd=new'
@@ -70,3 +70,4 @@ def generadorRandomOrg(n):
         except:
             pass
     return numbers
+"""

@@ -102,6 +102,8 @@ def test_rachas(pseudo: list, alpha: float = .05) -> bool:
     nn2 = 2*n_0*n_1
     n = len(sec)
     mean_c = .5+(nn2/n)
+    if n_1==0 or n_0==0:
+        return False
     var_c = (nn2*(nn2-n))/((n**2)*(n-1))
     z = (c-mean_c)/sqrt(var_c)
     if(abs(z) < norm.ppf(1-alpha/2)):

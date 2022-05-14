@@ -71,7 +71,7 @@ print(numbersPython2)
 print(numbersPython3)
 print(numbersPython4)
 
-
+"""
 # graficos
 
 fig, axs = plt.subplots(
@@ -250,44 +250,35 @@ print(ChiCuadradoTest(numbersPython4, 0.95, 9))
 # Test de racha
 print('test de racha')
 print('Resultados NumerosGLCC')
-print(f'semilla: {seedGLC1}')
-test_rachas(numbersGLCC1)
-print(f'semilla: {seedGLC2}')
-test_rachas(numbersGLCC2)
-print(f'semilla: {seedGLC3}')
-test_rachas(numbersGLCC3)
-print(f'semilla: {seedGLC3}')
-test_rachas(numbersGLCC4)
+print(f'semilla: {seedGLC1}{test_rachas(numbersGLCC1)}')
+
+print(f'semilla: {seedGLC2}{test_rachas(numbersGLCC2)}')
+
+print(f'semilla: {seedGLC3}{test_rachas(numbersGLCC3)}')
+
+print(f'semilla: {seedGLC3}{test_rachas(numbersGLCC4)}')
+
 
 print('Resultados NumerosJava')
-print(f'semilla: {seedGLC1}')
-test_rachas(numbersGLCJava1)
-print(f'semilla: {seedGLC2}')
-test_rachas(numbersGLCJava2)
-print(f'semilla: {seedGLC3}')
-test_rachas(numbersGLCJava3)
-print(f'semilla: {seedGLC3}')
-test_rachas(numbersGLCJava4)
+print(f'semilla: {seedGLC1}{test_rachas(numbersGLCJava1)}')
 
+print(f'semilla: {seedGLC2}{test_rachas(numbersGLCJava2)}')
+
+print(f'semilla: {seedGLC3}{test_rachas(numbersGLCJava3)}')
+print(f'semilla: {seedGLC3}{test_rachas(numbersGLCJava4)}')
+"""
 print('Resultados NumerosMedia')
-print(f'semilla: {seedMedia1}')
-test_rachas(numbersMedia1)
-print(f'semilla: {seedMedia2}')
-test_rachas(numbersMedia2)
-print(f'semilla: {seedMedia3}')
-test_rachas(numbersMedia3)
-print(f'semilla: {seedMedia4}')
-test_rachas(numbersMedia4)
+print(f'semilla: {seedMedia1}{test_rachas(numbersMedia1)}')
+print(f'semilla: {seedMedia2}{test_rachas(numbersMedia2)}')
+print(f'semilla: {seedMedia3}{test_rachas(numbersMedia3)}')
+print(f'semilla: {seedMedia4}{test_rachas(numbersMedia4)}')
 
+"""
 print('Resultados Numeros Python')
-print(f'test de racha Python 1')
-test_rachas(numbersPython1)
-print(f'test de racha Python 2')
-test_rachas(numbersPython2)
-print(f'test de racha Python 3')
-test_rachas(numbersPython3)
-print(f'test de racha Python 4')
-test_rachas(numbersPython4)
+print(f'test de racha Python 1{test_rachas(numbersPython1)}')
+print(f'test de racha Python 2{test_rachas(numbersPython2)}')
+print(f'test de racha Python 3{test_rachas(numbersPython3)}')
+print(f'test de racha Python 4{test_rachas(numbersPython4)}')
 
 # Test KS
 print('Test KS GLC')
@@ -305,8 +296,9 @@ print(f' semilla:{seedMedia1}'+KolmogorovTest(numbersMedia1, 0.05))
 print(f' semilla:{seedMedia2}'+KolmogorovTest(numbersMedia2, 0.05))
 print(f' semilla:{seedMedia3}'+KolmogorovTest(numbersMedia3, 0.05))
 print(f' semilla:{seedMedia4}'+KolmogorovTest(numbersMedia4, 0.05))
-print('Test KS media')
+print('Test KS python')
 print(f'numbersPython1'+KolmogorovTest(numbersPython1, 0.05))
 print(f'numbersPython2'+KolmogorovTest(numbersPython2, 0.05))
 print(f'numbersPython3'+KolmogorovTest(numbersPython3, 0.05))
 print(f'numbersPython4'+KolmogorovTest(numbersPython4, 0.05))
+"""
