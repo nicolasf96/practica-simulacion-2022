@@ -25,7 +25,7 @@ def ChiCuadradoTest(numerosPseudoaleatorios, q, df):
         chi2_list.append(num)
     # Al final obtengo un número de chi**2
     chi2_num = sum(chi2_list)
-    print('Valor chi cuadrado de la muestra GLC:', chi2_num)
+    #print('Valor chi cuadrado de la muestra GLC:', chi2_num)
 
     # Este número lo debo comparar en la tabla de contingencia de chi2
     # Si es mayor al valor establecido en la tabla, dado un intervalo de confianza (q) y grados de libertad (df) -> entonces no cumple
@@ -34,15 +34,13 @@ def ChiCuadradoTest(numerosPseudoaleatorios, q, df):
     chi2_table = chi2.ppf(q=q, df=df)
 
     if chi2_num < chi2_table:
-        resultado = True
-        print('PASA LA PRUEBA:')
-        print(f'Valor chi2_num:{chi2_num} < Valor chi2 tabla:{chi2_table}')
+        resultado = 'PASA LA PRUEBA'
+        #print(f'Valor chi2_num:{chi2_num} < Valor chi2 tabla:{chi2_table}')
     else:
-        resultado = False
-        print('No PASA LA PRUEBA:')
-        print(f'Valor chi2_num:{chi2_num} < Valor chi2 tabla:{chi2_table}')
+        resultado = 'No PASA LA PRUEBA'
+        #print(f'Valor chi2_num:{chi2_num} < Valor chi2 tabla:{chi2_table}')
 
-    return resultado, chi2_num, chi2_table
+    return f'{resultado}, Valor datos:{chi2_num}, Valor tabla:{chi2_table}'
 
 
 def KolmogorovTest(lista, alfa):
@@ -85,12 +83,12 @@ def test_autocorrelacion(lista, alfa, m, i):
     z = (densidad-0.25)/desviacion
     if (abs(z) > norm.ppf(1-(alfa/2))):
         #print(f'Son aleatorios')
-        return True
+        return f'Pasa la prueba, estadistico:{z} {densidad=}, {desviacion=}'
     #print(f'No son aleatorios')
-    return False
+    return f'No pasa la frueba, estadistico:{z} {densidad=}, {desviacion=}'
 
 
-def test_rachas(pseudo: list, alpha: float = .05) -> bool:
+def test_rachas(pseudo: list, alpha: float = .05) -> str:
     media_est = np.mean(pseudo)
     sec = [1 if r > media_est else 0 for r in pseudo]
     c = 0
@@ -102,10 +100,10 @@ def test_rachas(pseudo: list, alpha: float = .05) -> bool:
     nn2 = 2*n_0*n_1
     n = len(sec)
     mean_c = .5+(nn2/n)
-    if n_1==0 or n_0==0:
-        return False
+    if n_1 == 0 or n_0 == 0:
+        return 'No pasa la prueba, todos son mayores o menores que la mededia'
     var_c = (nn2*(nn2-n))/((n**2)*(n-1))
     z = (c-mean_c)/sqrt(var_c)
     if(abs(z) < norm.ppf(1-alpha/2)):
-        return True
-    return False
+        return f'Pasa la prueba, {mean_c=}, {var_c=}, estadistico{z}'
+    return f'No Pasa la prueba, {mean_c=}, {var_c=}, estadistico{z}'

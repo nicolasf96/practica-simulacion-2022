@@ -1,5 +1,5 @@
 from generadores import glc, media_cuadrados, generadorNumpy, generadorNumpy
-from tests import ChiCuadradoTest, KolmogorovTest, test_rachas
+from tests import ChiCuadradoTest, KolmogorovTest, test_autocorrelacion, test_rachas
 import matplotlib.pyplot as plt
 import scipy
 import scipy.stats as ss
@@ -223,11 +223,11 @@ axs[1, 1].set_title(f'Diagrama de dispersion Python')
 axs[1, 1].scatter(range(n), numbersPython4, c="black", s=1)
 plt.show()
 
-
+"""
 # Prueba de test
 
 # Tests Chi cuadrado
-print('test chi cuadrado')
+print('Test chi cuadrado')
 print('Resultados NumerosGLC')
 print(ChiCuadradoTest(numbersGLCC1, 0.95, 9))
 print(ChiCuadradoTest(numbersGLCC2, 0.95, 9))
@@ -266,14 +266,14 @@ print(f'semilla: {seedGLC2}{test_rachas(numbersGLCJava2)}')
 
 print(f'semilla: {seedGLC3}{test_rachas(numbersGLCJava3)}')
 print(f'semilla: {seedGLC3}{test_rachas(numbersGLCJava4)}')
-"""
+
 print('Resultados NumerosMedia')
 print(f'semilla: {seedMedia1}{test_rachas(numbersMedia1)}')
 print(f'semilla: {seedMedia2}{test_rachas(numbersMedia2)}')
 print(f'semilla: {seedMedia3}{test_rachas(numbersMedia3)}')
 print(f'semilla: {seedMedia4}{test_rachas(numbersMedia4)}')
 
-"""
+
 print('Resultados Numeros Python')
 print(f'test de racha Python 1{test_rachas(numbersPython1)}')
 print(f'test de racha Python 2{test_rachas(numbersPython2)}')
@@ -301,4 +301,44 @@ print(f'numbersPython1'+KolmogorovTest(numbersPython1, 0.05))
 print(f'numbersPython2'+KolmogorovTest(numbersPython2, 0.05))
 print(f'numbersPython3'+KolmogorovTest(numbersPython3, 0.05))
 print(f'numbersPython4'+KolmogorovTest(numbersPython4, 0.05))
-"""
+
+# Test autocorrelacion
+print('Test autocorrelacion GLC')
+print(
+    f' semilla:{seedGLC1}-> {test_autocorrelacion(numbersGLCC1, 0.05, 70, 56)}')
+print(
+    f' semilla:{seedGLC2}-> {test_autocorrelacion(numbersGLCC2, 0.05, 70, 56)}')
+print(
+    f' semilla:{seedGLC3}-> {test_autocorrelacion(numbersGLCC3, 0.05, 70, 56)}')
+print(
+    f' semilla:{seedGLC4}-> {test_autocorrelacion(numbersGLCC4, 0.05, 70, 56)}')
+
+print('Test autocorrelacion Java')
+print(
+    f' semilla:{seedGLC1}-> {test_autocorrelacion(numbersGLCJava1, 0.05, 70, 56)}')
+print(
+    f' semilla:{seedGLC2}-> {test_autocorrelacion(numbersGLCJava2, 0.05, 70, 56)}')
+print(
+    f' semilla:{seedGLC3}-> {test_autocorrelacion(numbersGLCJava3, 0.05, 70, 56)}')
+print(
+    f' semilla:{seedGLC4}-> {test_autocorrelacion(numbersGLCJava4, 0.05, 70, 56)}')
+
+print('Test autocorrelacion Media')
+print(
+    f' semilla:{seedMedia1}-> {test_autocorrelacion(numbersMedia1, 0.05, 70, 56)}')
+print(
+    f' semilla:{seedMedia2}-> {test_autocorrelacion(numbersMedia2, 0.05, 70, 56)}')
+print(
+    f' semilla:{seedMedia3}-> {test_autocorrelacion(numbersMedia3, 0.05, 70, 56)}')
+print(
+    f' semilla:{seedMedia4}-> {test_autocorrelacion(numbersMedia4, 0.05, 70, 56)}')
+
+print('Test autocorrelacion Python')
+print(
+    f'{test_autocorrelacion(numbersPython1, 0.05, 70, 56)}')
+print(
+    f'{test_autocorrelacion(numbersPython2, 0.05, 70, 56)}')
+print(
+    f'{test_autocorrelacion(numbersPython3, 0.05, 70, 56)}')
+print(
+    f'{test_autocorrelacion(numbersPython4, 0.05, 70, 56)}')
