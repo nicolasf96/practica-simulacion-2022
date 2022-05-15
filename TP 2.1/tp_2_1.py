@@ -305,40 +305,40 @@ print(f'numbersPython4'+KolmogorovTest(numbersPython4, 0.05))
 # Test autocorrelacion
 print('Test autocorrelacion GLC')
 print(
-    f' semilla:{seedGLC1}-> {test_autocorrelacion(numbersGLCC1, 0.05, 70, 56)}')
+    f' semilla:{seedGLC1}-> {test_autocorrelacion(numbersGLCC1, 0.02)}')
 print(
-    f' semilla:{seedGLC2}-> {test_autocorrelacion(numbersGLCC2, 0.05, 70, 56)}')
+    f' semilla:{seedGLC2}-> {test_autocorrelacion(numbersGLCC2, 0.02)}')
 print(
-    f' semilla:{seedGLC3}-> {test_autocorrelacion(numbersGLCC3, 0.05, 70, 56)}')
+    f' semilla:{seedGLC3}-> {test_autocorrelacion(numbersGLCC3, 0.02)}')
 print(
-    f' semilla:{seedGLC4}-> {test_autocorrelacion(numbersGLCC4, 0.05, 70, 56)}')
+    f' semilla:{seedGLC4}-> {test_autocorrelacion(numbersGLCC4, 0.02)}')
 
 print('Test autocorrelacion Java')
 print(
-    f' semilla:{seedGLC1}-> {test_autocorrelacion(numbersGLCJava1, 0.05, 70, 56)}')
+    f' semilla:{seedGLC1}-> {test_autocorrelacion(numbersGLCJava1, 0.02)}')
 print(
-    f' semilla:{seedGLC2}-> {test_autocorrelacion(numbersGLCJava2, 0.05, 70, 56)}')
+    f' semilla:{seedGLC2}-> {test_autocorrelacion(numbersGLCJava2, 0.02)}')
 print(
-    f' semilla:{seedGLC3}-> {test_autocorrelacion(numbersGLCJava3, 0.05, 70, 56)}')
+    f' semilla:{seedGLC3}-> {test_autocorrelacion(numbersGLCJava3, 0.02)}')
 print(
-    f' semilla:{seedGLC4}-> {test_autocorrelacion(numbersGLCJava4, 0.05, 70, 56)}')
+    f' semilla:{seedGLC4}-> {test_autocorrelacion(numbersGLCJava4, 0.02)}')
 
 print('Test autocorrelacion Media')
 print(
-    f' semilla:{seedMedia1}-> {test_autocorrelacion(numbersMedia1, 0.05, 70, 56)}')
+    f' semilla:{seedMedia1}-> {test_autocorrelacion(numbersMedia1, 0.02)}')
 print(
-    f' semilla:{seedMedia2}-> {test_autocorrelacion(numbersMedia2, 0.05, 70, 56)}')
+    f' semilla:{seedMedia2}-> {test_autocorrelacion(numbersMedia2, 0.02)}')
 print(
-    f' semilla:{seedMedia3}-> {test_autocorrelacion(numbersMedia3, 0.05, 70, 56)}')
+    f' semilla:{seedMedia3}-> {test_autocorrelacion(numbersMedia3, 0.02)}')
 print(
-    f' semilla:{seedMedia4}-> {test_autocorrelacion(numbersMedia4, 0.05, 70, 56)}')
+    f' semilla:{seedMedia4}-> {test_autocorrelacion(numbersMedia4, 0.02)}')
 
 print('Test autocorrelacion Python')
 print(
-    f'{test_autocorrelacion(numbersPython1, 0.05, 70, 56)}')
+    f'{test_autocorrelacion(numbersPython1, 0.02)}')
 print(
-    f'{test_autocorrelacion(numbersPython2, 0.05, 70, 56)}')
+    f'{test_autocorrelacion(numbersPython2, 0.02)}')
 print(
-    f'{test_autocorrelacion(numbersPython3, 0.05, 70, 56)}')
+    f'{test_autocorrelacion(numbersPython3, 0.02)}')
 print(
-    f'{test_autocorrelacion(numbersPython4, 0.05, 70, 56)}')
+    f'{test_autocorrelacion(numbersPython4, 0.02)}')

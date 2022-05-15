@@ -2,6 +2,7 @@ import numpy as np
 from scipy.stats import ksone, norm, chisquare, kstest, chi2
 from math import sqrt, trunc
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import scale
 
 
 # Parámetros:
@@ -68,24 +69,28 @@ def KolmogorovTest(lista, alfa):
     return f'dmax:{dmaximo} k_tabla:{k_tabla} NO pasa prueba '
 
 
-def test_autocorrelacion(lista, alfa, m, i):
+def test_autocorrelacion(lista, alfa):
     N = len(lista)  # tamaño de la muestra
     # i-->rimer elemento donde se busca correlacion
     # m-->se busca correlacion entre r_i y r_i+k*m
     # M--> el mayor entero tal que i+(M+1)*m es menor que N
-    M = trunc((N-(i+1))/m)-1
-    if M <= 0:
-        return
-    densidad = 0
-    densidad = sum([lista[(i+k*m)]*lista[i+(k+1)*m]
-                   for k in range(0, M+1)])/(M+1)
-    desviacion = sqrt((13*M)+7)/(12*(M+1))
-    z = (densidad-0.25)/desviacion
-    if (abs(z) > norm.ppf(1-(alfa/2))):
-        #print(f'Son aleatorios')
-        return f'Pasa la prueba, estadistico:{z} {densidad=}, {desviacion=}'
-    #print(f'No son aleatorios')
-    return f'No pasa la frueba, estadistico:{z} {densidad=}, {desviacion=}'
+    for i in range(1, len(lista)//2):
+        for m in range(i, len(lista)-i):
+            M = trunc((N-(i+1))/m)-1
+            if M <= 0:
+                return
+            densidad = 0
+            i -= 1
+            densidad = (sum([lista[(i+k*m)]*lista[i+(k+1)*m]
+                        for k in range(0, M+1)])/(M+1))-0.25
+            desviacion = sqrt((13*M)+7)/(12*(M+1))
+            z = densidad/desviacion
+            z_t = norm.ppf(1-(alfa/2), scale=desviacion, loc=0)
+            if (abs(z) > z_t):
+                #print(f'Son aleatorios')
+                return f'No Pasa la prueba, estadistico={z}>{z_t}  {densidad=}, {desviacion=}, {i=}, {m=}'
+            #print(f'No son aleatorios')
+    return f'Pasa la prueba, estadistico={z}>{z_t} {densidad=}, {desviacion=}'
 
 
 def test_rachas(pseudo: list, alpha: float = .05) -> str:
