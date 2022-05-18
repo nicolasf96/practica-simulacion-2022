@@ -39,20 +39,44 @@ class Funciones():
         r = self.gen.lcg()
         x = -ex * math.log(r)
         return x
+    def normal(self, mu, std, K):
+        suma = 0
+        for i in range(K):
+            r = self.gen.lcg()
+            suma = suma + r
+        x = std * (suma - K/2) / math.sqrt(K / 12) + mu
+        return x
+    def gamma(self, k, a):
+        tr = 1.0
+        for i in range(k):
+            r = self.gen.lcg()
+            tr = tr * r
+        x = -math.log(tr) / a
+        return x
 
 class Distribuciones():
     funciones = Funciones()
     def generador_uniforme(self, a,b,n):
-        numbersUniforme = []
+        numbers = []
         for i in range(n):
-            numbersUniforme.append(Funciones().uniforme(a,b))
-        return numbersUniforme
+            numbers.append(Funciones().uniforme(a,b))
+        return numbers
 
     def generador_exponencial(self, l, n):
-        #self.funciones.gen.get_seed()
-
-        exponenciales = []
+        numbers = []
         for i in range(n):
-            exponenciales.append(Funciones().exponencial(l))
+            numbers.append(Funciones().exponencial(l))
+        return numbers
 
-        return exponenciales
+
+    def generador_normal(self, media, desv, K, n):
+        numbers = []
+        for i in range(n):
+            numbers.append(self.funciones.normal(media, desv, K))
+        return numbers
+
+    def generador_gamma(self, k, alpha, n):
+        numbers = []
+        for i in range(n):
+            numbers.append(self.funciones.gamma(k, alpha))
+        return numbers
