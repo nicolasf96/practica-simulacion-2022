@@ -81,14 +81,16 @@ def test_autocorrelacion(lista, alfa):
                 return
             densidad = 0
             i -= 1
-            densidad = (sum([lista[(i+k*m)]*lista[i+(k+1)*m]
-                        for k in range(0, M+1)])/(M+1))-0.25
+            muestra = [lista[(i+k*m)]*lista[i+(k+1)*m]
+                       for k in range(0, M+1)]
+            densidad = (sum(muestra)/(M+1))-0.25
             desviacion = sqrt((13*M)+7)/(12*(M+1))
             z = densidad/desviacion
-            z_t = norm.ppf(1-(alfa/2), scale=desviacion, loc=0)
-            if (abs(z) > z_t):
+            z_t = norm.ppf(1-(alfa/2))
+            i += 1
+            if (abs(z) <= z_t):
                 #print(f'Son aleatorios')
-                return f'No Pasa la prueba, estadistico={z}>{z_t}  {densidad=}, {desviacion=}, {i=}, {m=}'
+                return f'No Pasa la prueba, estadistico={z}<={z_t}  {densidad=}, {desviacion=}, {i=}, {m=}'
             #print(f'No son aleatorios')
     return f'Pasa la prueba, estadistico={z}>{z_t} {densidad=}, {desviacion=}'
 
