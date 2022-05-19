@@ -13,11 +13,19 @@ numbersUniforme=Distribuciones().generador_uniforme(a=0,b=1,n=n)
 numbersExponencial=Distribuciones().generador_exponencial(l=3,n=n)
 numbersNormal=Distribuciones().generador_normal(media=8, desv=0.25, K=95, n=n)
 numbersGamma=Distribuciones().generador_gamma(k=3,alpha=0.4,n=n)
+numbersBinomial=Distribuciones().generador_binomial(N=30, p=0.45, n=n)
+numbersPoisson=Distribuciones().generador_poisson(lamb=5, n=n)
+numbersHipergeometricas=Distribuciones().generador_hipergeometricas(N=130, p=0.2, m=30, n=n)
+numbersPascal=Distribuciones().generador_pascal(k=2,p=0.2, n=n)
 
 print(numbersUniforme)
 print(numbersExponencial)
 print(numbersNormal)
 print(numbersGamma)
+print(numbersBinomial)
+print(numbersPoisson)
+print(numbersHipergeometricas)
+print(numbersPascal)
 #graficos
 fig, axs = plt.subplots(
     ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
@@ -42,7 +50,26 @@ axs[1, 1].hist(numbersGamma, bins=round(math.sqrt(len(numbersGamma))),  edgecolo
 
 plt.show()
 
+fig, axs = plt.subplots(
+    ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+axs[0, 0].set_title(f'Histograma de numeros binomial')
+axs[0, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 0].hist(numbersBinomial, bins=round(math.sqrt(len(numbersUniforme))),   edgecolor='black')
 
+axs[0, 1].set_title(f'Histograma de numeros poisson')
+axs[0, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 1].hist(numbersPoisson, bins=round(math.sqrt(len(numbersExponencial))),  edgecolor='black')
+
+axs[1, 0].set_title(f'Histograma de numeros hipergeometrica')
+axs[1, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 0].hist(numbersHipergeometricas, bins=round(math.sqrt(len(numbersNormal))),  edgecolor='black')
+
+axs[1, 1].set_title(f'Histograma de numeros pascal')
+axs[1, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 1].hist(numbersPascal, bins=round(math.sqrt(len(numbersGamma))),  edgecolor='black')
+
+
+plt.show()
 
 #Test
 print('Test chi cuadrado')

@@ -39,6 +39,7 @@ class Funciones():
         r = self.gen.lcg()
         x = -ex * math.log(r)
         return x
+
     def normal(self, mu, std, K):
         suma = 0
         for i in range(K):
@@ -46,12 +47,58 @@ class Funciones():
             suma = suma + r
         x = std * (suma - K/2) / math.sqrt(K / 12) + mu
         return x
+
     def gamma(self, k, a):
         tr = 1.0
         for i in range(k):
             r = self.gen.lcg()
             tr = tr * r
         x = -math.log(tr) / a
+        return x
+
+    def binomial(self, N, p):
+        x = 0
+        for i in range(N):
+            r = self.gen.lcg()
+            if ((r - p) <= 0):
+                x = x + 1
+        return x
+
+    def pascal(self, k, q):
+        tr = 1.0
+        qr = math.log(q)
+        for i in range(k):
+            r = self.gen.lcg()
+            tr = tr * r
+        x = math.log(tr) / qr
+        return x
+
+    def hipergeometrica(self, N, p, m):
+        x = 0.0
+
+        for i in range(m):
+            r = self.gen.lcg()
+            if (r - p) <= 0:
+                s = 1.0
+                x += 1.0
+            else:
+                s = 0.0
+            p = (N * p - s) / (N - 1.0)
+            N -= 1.0
+
+        return x
+
+    def poisson(self, l):
+        x = 0.0
+        b = math.exp(-l)
+        t = 1.0
+        while True:
+            r = self.gen.lcg()
+            t = t * r
+            if (t - b) <= 0:
+                break
+            else:
+                x += 1.0
         return x
 
 class Distribuciones():
@@ -79,4 +126,31 @@ class Distribuciones():
         numbers = []
         for i in range(n):
             numbers.append(self.funciones.gamma(k, alpha))
+        return numbers
+
+    def generador_binomial(self, N, p, n):
+        numbers = []
+        for i in range(n):
+            numbers.append(self.funciones.binomial(N, p))
+        return numbers
+
+    def generador_hipergeometricas(self, N, p, m, n):
+        numbers = []
+        for i in range(n):
+            x = self.funciones.hipergeometrica(N, p, m)
+            numbers.append(x)
+        return numbers
+
+    def generador_poisson(self, lamb, n):
+        numbers = []
+        for i in range(n):
+            numbers.append(self.funciones.poisson(lamb))
+        return numbers
+
+
+    def generador_pascal(self, k, p, n):
+        q = 1 - p
+        numbers = []
+        for i in range(n):
+            numbers.append(self.funciones.pascal(k, q))
         return numbers
