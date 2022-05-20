@@ -1,5 +1,5 @@
-from operator import le
-from scipy.stats import norm
+import numpy as np
+
 from math import sqrt, pi, exp
 
 import matplotlib.pyplot as plt
