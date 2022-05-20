@@ -1,3 +1,5 @@
+import numpy as np
+from numpy import std
 from scipy.stats import norm
 from math import sqrt, pi, exp
 
@@ -9,5 +11,5 @@ def max_densidad_norm(mu_: float, var_: float) -> tuple:
     return max(f_0, f_1), min(f_0, f_1)
 
 
-def Normal(generador, mu: float, var: float, K: int) -> list:
+def Normal( mu: float, var: float, K: int) -> list:
     pass
