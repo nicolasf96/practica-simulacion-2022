@@ -1,5 +1,5 @@
 from typing import Any
-from math import sqrt, log
+from math import log
 
 
 def Exponencial(pseudo: list, lambda_e: float) -> Any:
