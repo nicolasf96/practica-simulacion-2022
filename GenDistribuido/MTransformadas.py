@@ -6,6 +6,7 @@ from math import log
 import numpy as np
 from numpy import std
 from math import sqrt, pi, exp
+import matplotlib.pyplot as plt
 
 
 def Uniforme(a: float, b: float, n: int) -> list:
@@ -117,12 +118,65 @@ def Pascal(k: int, p: float, n: int) -> list:
         numbers.append(x)
     return numbers
 
+n=10000
+numbersUniforme=Uniforme(a=0, b=1, n=n)
+numbersExponencial=Exponencial(l=3, n=n)
+numbersNormal=Normal(mu=8, var=0.25, K=95, n=n)
+numbersGamma=Gamma(k=8, alpha=0.95, n=n)
+numbersBinomial=Binomial(N=35, p=0.50, n=n)
+numbersPoisson=Poisson(l=6, n=n)
+numbersHipergeometricas=Hipergeometricas(N=170, p=0.45, m=25, n=n)
+numbersPascal=Pascal(k=4, p=0.45, n=n)
+print(numbersUniforme)
+print(numbersExponencial)
+print(numbersNormal)
+print(numbersGamma)
+print(numbersBinomial)
+print(numbersPoisson)
+print(numbersHipergeometricas)
+print(numbersPascal)
 
-"""print(Uniforme(a=0, b=1, n=1000))
-print(Exponencial(l=3, n=1000))
-print(Normal(mu=8, var=0.25, K=95, n=1000))
-print(Gamma(k=8, alpha=0.95, n=1000))
-print(Binomial(N=35, p=0.50, n=1000))
-print(Hipergeometricas(N=170, p=0.45, m=25, n=1000))
-print(Poisson(l=6, n=1000))
-print(Pascal(k=4, p=0.45, n=1000))"""
+
+fig, axs = plt.subplots(
+    ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+
+# graficos hist GCL con C
+axs[0, 0].set_title(f'Histograma de numeros uniforme')
+axs[0, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 0].hist(numbersUniforme, bins=round(math.sqrt(len(numbersUniforme))),   edgecolor='black')
+
+axs[0, 1].set_title(f'Histograma de numeros exponenciales')
+axs[0, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 1].hist(numbersExponencial, bins=round(math.sqrt(len(numbersExponencial))),  edgecolor='black')
+
+axs[1, 0].set_title(f'Histograma de numeros normal')
+axs[1, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 0].hist(numbersNormal, bins=round(math.sqrt(len(numbersNormal))),  edgecolor='black')
+
+axs[1, 1].set_title(f'Histograma de numeros gamma')
+axs[1, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 1].hist(numbersGamma, bins=round(math.sqrt(len(numbersGamma))),  edgecolor='black')
+
+
+plt.show()
+
+fig, axs = plt.subplots(
+    ncols=2, nrows=2, constrained_layout=True, figsize=[11, 8])
+axs[0, 0].set_title(f'Histograma de numeros binomial')
+axs[0, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 0].hist(numbersBinomial, bins=round(math.sqrt(len(numbersUniforme))),   edgecolor='black')
+
+axs[0, 1].set_title(f'Histograma de numeros poisson')
+axs[0, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[0, 1].hist(numbersPoisson, bins=round(math.sqrt(len(numbersExponencial))),  edgecolor='black')
+
+axs[1, 0].set_title(f'Histograma de numeros hipergeometrica')
+axs[1, 0].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 0].hist(numbersHipergeometricas, bins=round(math.sqrt(len(numbersNormal))),  edgecolor='black')
+
+axs[1, 1].set_title(f'Histograma de numeros pascal')
+axs[1, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
+axs[1, 1].hist(numbersPascal, bins=round(math.sqrt(len(numbersGamma))),  edgecolor='black')
+
+
+plt.show()
