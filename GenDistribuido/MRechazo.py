@@ -4,8 +4,9 @@ import numpy as np
 from math import sqrt, pi, exp, gamma
 
 
-"""import matplotlib.pyplot as plt"""
-"""from MTransformadas import Uniforme, Exponencial, Hipergeometricas, Normal"""
+import matplotlib.pyplot as plt
+from Otros import Uniforme, Exponencial, Hipergeometricas, Normal
+from MTransformada import UniformeT, ExponencialT, NormalT
 
 
 def densidad_norm(m, v, x):
@@ -77,9 +78,10 @@ distribucion_generada = generador_numpy(10000)
 #distribucion_generada = Hipergeometricas(N=170, p=0.45, m=25, n=1000)
 #distribucion_generada = Normal(3, 0.8, 95, 10000)
 #distribucion_generada = UniformeR(distribucion_generada, 5, 15)
-"""plt.hist(distribucion_generada)
+distribucion_generada = NormalT(distribucion_generada, 2, .5)
+plt.hist(distribucion_generada, bins=15)
 #plt.axvline(x=mu, color='b', label='axvline - full height')
 plt.title('Histograma de una variable')
 plt.xlabel('Valor de la variable')
 plt.ylabel('Conteo')
-plt.show()"""
+plt.show()
