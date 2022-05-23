@@ -138,6 +138,26 @@ def BinomialR(pseudo: list, n: int, p: float) -> list:
     return binom
 
 
+def densidad_Pascal(r: int, p: float, x: int) -> float:
+    a = factorial(x+r-1)/(factorial(x)*(factorial(r-1)))
+    b = p**r
+    c = (1-p)**(x)
+    return a*b*c
+
+
+def PascalR(pseudo: list, r: int, p: float) -> list:
+    M = densidad_Pascal(r, p, trunc(r*(1-p)/p))
+    pascal = []
+    for U in pseudo:
+        while True:
+            V = np.random.uniform(0, 1)
+            T = trunc(2*r*V)
+            if(M*U <= densidad_Pascal(r, p, T)):
+                pascal.append(T)
+                break
+    return pascal
+
+
 def generador_numpy(n):
     numbers = []
     for i in range(n):
@@ -157,8 +177,10 @@ distribucion_generada = generador_numpy(10000)
 #plt.hist(distribucion_generada, bins=35)
 #distribucion_generada = PoissonR(distribucion_generada, 10, 25)
 #distribucion_generada = BinomialR(distribucion_generada, 40, .5)
+distribucion_generada = PascalR(distribucion_generada, 80, .5)
 #distribucion_generada = HipergeometricaR(distribucion_generada, 900, 160)
-#plt.hist(distribucion_generada, bins=round(sqrt(len(distribucion_generada))),  edgecolor='black')
+plt.hist(distribucion_generada, bins=round(
+    sqrt(len(distribucion_generada))),  edgecolor='black')
 #plt.axvline(x=mu, color='b', label='axvline - full height')
 plt.title('Histograma de una variable')
 plt.xlabel('Valor de la variable')
