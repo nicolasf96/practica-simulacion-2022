@@ -118,7 +118,8 @@ def Pascal(k: int, p: float, n: int) -> list:
         numbers.append(x)
     return numbers
 
-n=10000
+
+"""n=10000
 numbersUniforme=Uniforme(a=0, b=1, n=n)
 numbersExponencial=Exponencial(l=3, n=n)
 numbersNormal=Normal(mu=8, var=0.25, K=95, n=n)
@@ -179,4 +180,4 @@ axs[1, 1].set(xlabel='numeros', ylabel='Frecuencia Absoluta')
 axs[1, 1].hist(numbersPascal, bins=round(math.sqrt(len(numbersGamma))),  edgecolor='black')
 
 
-plt.show()
+plt.show()"""
