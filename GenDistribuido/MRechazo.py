@@ -10,7 +10,9 @@ from MTransformada import UniformeT, ExponencialT, NormalT
 
 
 def densidad_norm(m, v, x):
-    return (1/v*sqrt(2*pi))*exp(-(((x-m)**2)/2*(v**2)))
+    numerador = exp(-(((x-m)**2)/2*(v**2)))
+    denominador = v*sqrt(2*pi)
+    return numerador/denominador
 
 
 def NormalR(pseudo: list, mu: float, des: float) -> list:
@@ -19,7 +21,7 @@ def NormalR(pseudo: list, mu: float, des: float) -> list:
     pseudo: Elementos pseudoaleatorios con distribucion uniforme
     mu:media de la funcion objetivo
     des:desvio de la funcion objetivo"""
-    a, b = mu-(5*des), mu+(5*des)
+    a, b = mu-(10*des), mu+(10*des)
     M = 1/(des*sqrt(2*pi))  # maximo valor de densidad de la funcion objetivo
     aceptados = []
     for U in pseudo:
@@ -168,7 +170,7 @@ def generador_numpy(n):
 #mu = 1
 #var = 1
 distribucion_generada = generador_numpy(10000)
-#distribucion_generada = NormalR(distribucion_generada, 19, 8)
+distribucion_generada = NormalR(distribucion_generada, 19, 8)
 #distribucion_generada = Hipergeometricas(N=170, p=0.45, m=25, n=1000)
 #distribucion_generada = Normal(3, 0.8, 95, 10000)
 #distribucion_generada = UniformeR(distribucion_generada, 5, 15)
@@ -177,7 +179,7 @@ distribucion_generada = generador_numpy(10000)
 #plt.hist(distribucion_generada, bins=35)
 #distribucion_generada = PoissonR(distribucion_generada, 10, 25)
 #distribucion_generada = BinomialR(distribucion_generada, 40, .5)
-distribucion_generada = PascalR(distribucion_generada, 80, .5)
+#distribucion_generada = PascalR(distribucion_generada, 80, .5)
 #distribucion_generada = HipergeometricaR(distribucion_generada, 900, 160)
 plt.hist(distribucion_generada, bins=round(
     sqrt(len(distribucion_generada))),  edgecolor='black')
