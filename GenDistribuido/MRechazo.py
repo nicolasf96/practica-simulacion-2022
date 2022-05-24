@@ -89,28 +89,25 @@ def PoissonR(pseudo: list, lmbda: float, max_x: int) -> list:
     return poisson
 
 
-"""def densidad_Hipergeometrica(N_p: int, N_q: int, n: int, x: int) -> float:
-    N = N_p+N_q
-    a = factorial(N_p)/(factorial(x)*factorial(N_p-x))
-    b = factorial(N_q)/(factorial(N-x)*factorial(N_q-(N-x)))
+def densidad_Hipergeometrica(N: int, K: int, n: int, x: int) -> float:
+    a = factorial(K)/(factorial(x)*factorial(K-x))
+    b = factorial(N-K)/(factorial(n-x)*factorial(N-K-(n-x)))
     c = factorial(N)/(factorial(n)*factorial(N-n))
     return (a*b)/c
 
 
-def HipergeometricaR(pseudo: list, N_p: int, n: int) -> list:   #NO FUNCIONA
-    N = len(pseudo)
-    N_q = N-N_p
-    q = trunc((n*N_q)/N)
-    M = densidad_Hipergeometrica(N_p, N_q, n, q)
+def HipergeometricaR(pseudo: list, N: int, K: int, n: int) -> list:
+    media = n*K/N
+    M = densidad_Hipergeometrica(N, K, n, media)
     hiper = []
     for U in pseudo:
         while True:
             V = np.random.uniform(0, 1)
-            T = trunc(V*N_p)
-            if(M*U <= densidad_Hipergeometrica(N_p, N_q, n, T)):
+            T = trunc(n*V)
+            if(M*U <= densidad_Hipergeometrica(N, K, n, T)):
                 hiper.append(T)
                 break
-    return hiper"""
+    return hiper
 
 
 def densidad_binomial(n: int, p: float, x: int) -> float:

@@ -1,6 +1,6 @@
 from MTransformada import UniformeT, ExponencialT, NormalT
-from MRechazo import UniformeR, GammaR, EmpiricaR, ExponenecialR, NormalR, BinomialR, PascalR, PoissonR
-from scipy.stats import uniform, norm, gamma, expon, binom, poisson, nbinom
+from MRechazo import UniformeR, GammaR, EmpiricaR, ExponenecialR, NormalR, BinomialR, PascalR, PoissonR, HipergeometricaR
+from scipy.stats import uniform, norm, gamma, expon, binom, poisson, nbinom, geom
 from matplotlib import pyplot as plt
 import numpy as np
 from math import sqrt
@@ -174,3 +174,15 @@ plt.title('Histograma de una VA con distribucion Empicrica-Aceptacion y rechazo'
 plt.xlabel('Valor de la variable')
 plt.ylabel('Ocurrencias')
 plt.show()
+
+N_g, K_g, n_g = 200, 60, 10
+dist = generador_numpy(10000)
+dist = HipergeometricaR(dist, N_g, K_g, n_g)
+plt.hist(dist, bins=round(sqrt(len(dist))),  edgecolor='black')
+plt.title(
+    'Histograma de una VA con distribucion Hipergeometrica-Aceptacion y rechazo')
+plt.xlabel('Valor de la variable')
+plt.ylabel('Ocurrencias')
+plt.show()
+print(
+    f"Test Kolmogorov-Smirnov: Distribucion HiperGeometrica con {N_g=}, {K_g=} y {n_g=}-> {KolmogorovTest(dist,cola,geom)}")
