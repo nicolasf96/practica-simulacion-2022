@@ -1,13 +1,5 @@
-from tracemalloc import start, stop
 import numpy as np
-
 from math import sqrt, pi, exp, gamma, factorial, trunc
-
-
-import matplotlib.pyplot as plt
-from sympy import li
-from Otros import Uniforme, Exponencial, Hipergeometricas, Normal
-from MTransformada import UniformeT, ExponencialT, NormalT
 
 
 def densidad_norm(m, v, x):
@@ -183,34 +175,3 @@ def EmpiricaR(pseudo: list, min_x: int, lista_fr: list) -> list:
                 empiric.append(T)
                 break
     return empiric
-
-
-def generador_numpy(n):
-    numbers = []
-    for i in range(n):
-        numbers.append(np.random.uniform(0, 1))
-    return numbers
-
-
-#mu = 1
-#var = 1
-distribucion_generada = generador_numpy(10000)
-#distribucion_generada = NormalR(distribucion_generada, 19, 8)
-#distribucion_generada = Hipergeometricas(N=170, p=0.45, m=25, n=1000)
-#distribucion_generada = Normal(3, 0.8, 95, 10000)
-#distribucion_generada = UniformeR(distribucion_generada, 5, 15)
-#distribucion_generada = NormalT(distribucion_generada, 2, .5)
-#distribucion_generada = GammaR(distribucion_generada, lmbda=2, alpha=2, max_x=20)
-#plt.hist(distribucion_generada, bins=35)
-#distribucion_generada = PoissonR(distribucion_generada, 10, 25)
-#distribucion_generada = BinomialR(distribucion_generada, 40, .5)
-#distribucion_generada = PascalR(distribucion_generada, 80, .5)
-#distribucion_generada = HipergeometricaR(distribucion_generada, 900, 160)
-#fr_empirica = [.01, .09, .03, .06, .04, .07, .1, .3, .3]
-#distribucion_generada = EmpiricaR(distribucion_generada, -9, fr_empirica)
-#plt.hist(distribucion_generada, bins=round(sqrt(len(distribucion_generada))),  edgecolor='black')
-#plt.axvline(x=mu, color='b', label='axvline - full height')
-plt.title('Histograma de una variable')
-plt.xlabel('Valor de la variable')
-plt.ylabel('Conteo')
-plt.show()
