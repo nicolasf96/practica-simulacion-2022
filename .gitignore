@@ -2,3 +2,7 @@
 TP 1.1/texput.log
 *.pyc
 .vscode/settings.json
+*.iml
+*.xml
+.idea/misc.xml
+.idea/practica-simulacion-2022.iml
