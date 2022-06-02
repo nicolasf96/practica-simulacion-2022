@@ -283,9 +283,6 @@ class Inventory():
             bklog_costs.append(self.Averge_bklog_cost(1+i))
             inv_level.append(
                 self.montly_inv_check[i]-self.montly_bklog_check[i])
-            T = (self.montly_inv_check[i]*self.Item_montly_costs)+(
-                self.montly_bklog_check[i]*self.bklog_costs)+self.montly_order_costs[i]
-            monthly_total.append(T)
             # montly inv check es lista
             # montly order costs es la lista
 
@@ -319,14 +316,18 @@ class Inventory():
         ax4 = axs[1, 1]
         ax4.set_title("Gastos realizados")
         ax4.set(xlabel='Mes', ylabel='$ gastado')
-        ax4.plot(monthly_total, label='Total mensual')
         ax4.plot(self.montly_order_costs, label='Gasto mensual en reposicion')
         bk_c = h_c = []
         for i in range(len(self.montly_inv_check)):
-            bk_c.append(self.montly_bklog_check[i]*self.bklog_costs)
-            h_c.append(self.montly_inv_check[i]*self.Item_montly_costs)
+            h=self.montly_inv_check[i]*self.Item_montly_costs
+            b=self.montly_bklog_check[i]*self.bklog_costs
+            c=self.montly_order_costs[i]
+            bk_c.append(b)
+            h_c.append(h)
+            monthly_total.append((h+b+c))
         ax4.plot(bk_c, label='Gasto mensual por exceso de demanda')
         ax4.plot(h_c, label='Gasto mensual por mantenimiento')
+        ax4.plot(monthly_total, label='Total mensual')
         for ax in axs.flat:
             ax.legend()
             ax.set_xlim(left=0, right=120)
