@@ -200,13 +200,13 @@ class Inventory():
     def Average_holding_cost(self, m: int) -> float:
         """m :number of month to check the avg cost
         ADVICE: 1 <= m <= round(self.time)"""
-        I = sum(self.montly_inv_check[:m])/m
+        I = sum(self.montly_inv_check[0:m])/m
         return I*self.Item_montly_costs
 
     def Averge_bklog_cost(self, m: int) -> float:
         """m :number of month to check the avg cost
         ADVICE: 1 <= m <= round(self.time)"""
-        I = sum(self.montly_bklog_check[:m])/m
+        I = sum(self.montly_bklog_check[0:m])/m
         return I*self.bklog_costs
 
     def Run_Program(self) -> None:
@@ -300,9 +300,9 @@ class Inventory():
 
         # costo promedio
         ax2 = axs[0, 1]
-        ax2.set_title("Costos promedios acumulados en el mes")
-        ax2.set(xlabel='Mes', ylabel='Gasto promedio del mes $ por Item')
-        ax2.plot(holding_costs, label='Gasto promedio por mantenimiento')
+        ax2.set_title("Costos promedios en el tiempo")
+        ax2.set(xlabel='Mes', ylabel='Costo promedio en el mes')
+        ax2.plot(holding_costs, label='Costo promedio de mantenimiento')
         ax2.plot(bklog_costs, label='Perdida promedio por exceso de demanda')
 
         # demanda items
@@ -317,10 +317,11 @@ class Inventory():
         ax4.set_title("Gastos realizados")
         ax4.set(xlabel='Mes', ylabel='$ gastado')
         ax4.plot(self.montly_order_costs, label='Gasto mensual en reposicion')
-        bk_c = h_c = []
+        bk_c = []
+        h_c = []
         for i in range(len(self.montly_inv_check)):
-            h=self.montly_inv_check[i]*self.Item_montly_costs
-            b=self.montly_bklog_check[i]*self.bklog_costs
+            h=(self.montly_inv_check[i])*self.Item_montly_costs
+            b=(self.montly_bklog_check[i])*self.bklog_costs
             c=self.montly_order_costs[i]
             bk_c.append(b)
             h_c.append(h)
