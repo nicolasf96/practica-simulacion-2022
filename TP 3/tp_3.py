@@ -1,5 +1,6 @@
 from random import random, seed
 from numpy import log, average, median, std, bincount, array, insert
+import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 from tabulate import tabulate
@@ -224,7 +225,7 @@ class Queue_mm1():
         tiempo_promedio_sistema = metricas['tiempo_promedio_sistema_avg']
         utilizacion_servidor = metricas['utilizacion_servidor_avg']
 
-        graficas = [clientes_cola, clientes_sistema, tiempo_promedio_cola, tiempo_promedio_sistema,
+        graficas = [clientes_sistema, tiempo_promedio_sistema, clientes_cola, tiempo_promedio_cola,
                     utilizacion_servidor]
 
         return graficas
@@ -314,17 +315,15 @@ class Queue_mm1():
 
     def grafica_metricas(self, metricas, acumulados=False):
 
-        titulos = ['Clientes promedio en cola', 'Clientes promedio en sistema', 'Tiempo promedio en cola',
-                   'Tiempo promedio en sistema', 'Utilizacion del servidor']
-
+        titulos = ['Numero promedio de clientes en el sistema(Ls)', 'Tiempo promedio de cliente en el sistema',
+                   'Numero promedio de clientes en cola(Lq)', 'Tiempo promedio de espera en la cola(Wq)',
+                   ' Porcentaje promedio de utilizacion del servidor']
+        # graficas = [clientes_sistema, tiempo_promedio_sistema, clientes_cola, tiempo_promedio_cola, utilizacion_servidor]
         if acumulados:
-            graficas = self.obtiene_metricas_acumuladas(metricas)
-            title = 'Simulación MM1 | Métricas Acumuladas | λ =' + str(self.parameter_lambda) + ', μ = ' + str(
-                self.parameter_mu)
-            acum_text = 'acum_'
+            print("h")
         else:
             graficas = self.obtiene_metricas_promedio(metricas)
-            title = 'Simulación MM1 | λ =' + str(self.parameter_lambda) + ', μ = ' + str(self.parameter_mu)
+            title = 'Parametros: λ =' + str(self.parameter_lambda) + ', μ = ' + str(self.parameter_mu)
             acum_text = ''
 
         fig, axs = plt.subplots(3, 2, constrained_layout=True)
@@ -345,15 +344,15 @@ class Queue_mm1():
             ax = axs[a][cont]
             ax.set_xticks(x_axis)
             ax.plot(x_axis, grafica)
-            ax.hlines(average(grafica), 1, len(grafica), colors='r', linestyles="dashed", lw=1)
-            ax.set_xlabel("Cantidad de simulaciones")
+            ax.hlines(average(grafica), 1, len(grafica), colors='g', lw=1)
+            ax.set_xlabel("Corridas")
 
             if a == 0:
-                y_label = 'Clientes (cantidad)'
+                y_label = 'Cantidad)'
             elif a == 1:
-                y_label = 'Tiempo (m)'
+                y_label = 'Tiempo'
             elif a == 2 and cont == 0:
-                y_label = 'Utilización (%)'
+                y_label = 'Porcentaje Utilizacion'
 
             ax.set_ylabel(y_label)
             ax.set_title(titulos[i])
@@ -367,55 +366,8 @@ class Queue_mm1():
             self.parameter_mu) + '.png')
         plt.show()
 
-    def grafica_mm1k(self, promedios_simulacion, tamaños_cola):
-
-        title = 'Simulación MM1K | Métricas λ =' + str(self.parameter_lambda) + ', μ = ' + str(self.parameter_mu)
-        titulos = ['Clientes promedio en cola', 'Clientes promedio en sistema', 'Tiempo promedio en cola',
-                   'Tiempo promedio en sistema', 'Utilizacion del servidor', 'Denegación de servicio']
-
-        # Transponer los promedios
-        promedios_simulacion = array(promedios_simulacion).T
-
-        fig, axs = plt.subplots(3, 2, constrained_layout=True)
-        fig.suptitle(title)
-
-        cont = 0
-        a = 0
-        ax = plt.Subplot
-
-        x_axis = [i for i in range(1, 7)]
-
-        for i, grafica in enumerate(promedios_simulacion, start=0):
-
-            if cont == 2:
-                cont = 0
-                a += 1
-
-            ax = axs[a][cont]
-            ax.set_xticks(tamaños_cola)
-            ax.bar(tamaños_cola, grafica)
-            ax.set_xlabel("Longitud máxima de cola")
-
-            if a == 0:
-                y_label = 'Clientes (cantidad)'
-            elif a == 1:
-                y_label = 'Tiempo (m)'
-            elif a == 2 and cont == 0:
-                y_label = 'Utilización (%)'
-
-            ax.set_ylabel(y_label)
-            ax.set_title(titulos[i])
-
-            cont += 1
-
-        win_manager = plt.get_current_fig_manager()
-        win_manager.window.state('zoomed')
-
-        plt.savefig("grafica_mm1k_lambda_" + str(self.parameter_lambda) + '_mu_' + str(self.parameter_mu) + ".png")
-        plt.show()
-
     def grafica_cant_clientes(self, frecuencias_cola_grafica, frecuencias_sistema_grafica):
-        title = 'Simulación MM1 | λ =' + str(self.parameter_lambda) + ', μ = ' + str(self.parameter_mu)
+        title = 'Parametros λ =' + str(self.parameter_lambda) + ', μ = ' + str(self.parameter_mu)
 
         titulos = ['Cantidad de clientes en cola', 'Cantidad de clientes en sistema']
 
@@ -506,24 +458,226 @@ class Queue_mm1():
             file.writelines('\n\n')
 
 
+Q_LIMIT = 50  # Limite de longitud de la cola
+BUSY = 1  # Servidor ocupado
+IDLE = 0  # Servidor libre
+INFINITE = 10 ** 50  # Simular numero arbitrariamente grande para este caso
+MAX_CUSTOMERS = 1000  # Maximo de clientes atendidos
+
+
+class mm1k:
+    def __init__(self, n, arrivalRate, serviceRate, queueLimit, arrivalMean):
+        self.maxCustomers = MAX_CUSTOMERS
+        self.arrivalRate = arrivalRate
+        self.serviceRate = serviceRate
+        self.runs = n
+        self.queueLimit = queueLimit
+        self.arrivalMean = arrivalMean
+        self.parameterLambda = self.arrivalRate
+        self.parameterMu = self.serviceRate
+        self.totalCustomersInSystem = []
+        self.totalCustomersInQueue = []
+        self.totalTimeInSystem = []
+        self.totalTimeInQueue = []
+        self.totalAreaServerStatus = []
+        self.totalCustomersPerAmountInQueue = []
+        self.totalDenegationProbability = []
+        self.totalSimulationTime = []
+
+        for _ in range(self.runs):
+            # Variables de estado (rutina de inicializacion)
+            self.initializationRoutine()
+            self.main()
+
+        self.showFinalData()
+
+    def initializationRoutine(self):
+        self.clock = 0
+        self.status = IDLE
+
+        self.lastEventTime = 0
+        self.nextEventType = 0  # 0: arrival, 1: departure
+        self.customersInQueue = 0
+        self.customersDelayed = 0
+        self.delays = 0
+        self.areaCustomersInQueue = 0
+        self.areaServerStatus = 0
+        self.amountArrivals = 0
+        self.amountRejected = 0
+        self.queueTimesPerCustomers = [0] * (self.queueLimit + 1)
+
+        self.arrivalsTime = [0] * (Q_LIMIT + 1)
+        self.nextEventTime = [0, 0]
+        self.nextEventTime[0] = self.clock + self.expon(self.arrivalRate)
+        self.nextEventTime[1] = INFINITE  # Numero arbitrariamente grande
+
+    def timingRoutine(self):
+        self.clock = min(self.nextEventTime)
+        self.nextEventType = np.argmin(self.nextEventTime)
+
+    def eventRoutine(self):
+        # ARRIVAL
+        if self.nextEventType == 0:
+            self.amountArrivals += 1
+            # Valida si el servidor esta ocupado
+            if self.status == BUSY:
+                # El servidor esta ocupado, se incrementa el nro de clientes en cola
+                self.customersInQueue += 1
+                if self.customersInQueue > Q_LIMIT:
+                    self.customersInQueue -= 1
+                    # El limite de la cola es mayor que la cantidad de clientes, se rechaza al ultimo
+                    self.amountRejected += 1
+                else:
+                    # Todavía hay lugar en la cola, se guarda el tiempo de arrivo del cliente que llega en el final de arrivalsTime
+                    self.arrivalsTime[self.customersInQueue - 1] = self.clock
+            else:
+                # El servidor pasa a estar ocupado
+                self.status = BUSY
+                self.customersDelayed += 1
+                # Asigna un tiempo de partida para fin de servicio
+                self.departure()
+            self.arrival()
+        # DEPARTURE
+        else:
+            if self.customersInQueue == 0:
+                # La cola esta vacía, se pone el servidor como ocioso y se deja de considerar el evento de partida
+                self.status = IDLE
+                self.nextEventTime[1] = INFINITE
+            else:
+                # La cola no esta vacía, se decrementa el numero de clientes en cola
+                self.customersInQueue -= 1
+                # Se calcula y acumula el delay del cliente que empezó el servicio
+                self.delays += self.clock - self.arrivalsTime[0]
+                # Incrementa el numero de clientes demorado y se programa la partida
+                self.customersDelayed += 1
+                self.departure()
+                # Mueve a cada cliente en cola una posición para arriba
+                del self.arrivalsTime[0]
+                self.arrivalsTime.append(0)
+
+    def expon(self, mean):
+        u = random()
+        return -mean * log(u)
+
+    def arrival(self):
+        self.nextEventTime[0] = self.clock + self.expon(1 / self.arrivalRate)
+
+    def departure(self):
+        self.nextEventTime[1] = self.clock + self.expon(1 / self.serviceRate)
+
+    def timeAndAverageStadistics(self):
+        # Calcula el tiempo desde el último evento y actualiza el marcador del ultimo evento
+        self.timeSincelastEvent = self.clock - self.lastEventTime
+        self.lastEventTime = self.clock
+
+        # Actualiza tiempo en cola segun cantidad de clientes
+        # FALTA HACER ESTO
+        # self.queueTimesPerCustomers[self.customersInQueue] += self.customersInQueue * self.timeSincelastEvent
+        # Actualiza el area debajo de la función cantidad de clientes en cola
+        self.areaCustomersInQueue += self.customersInQueue * self.timeSincelastEvent
+        # Actualiza el area debajo de la función Servidor ocupado
+        self.areaServerStatus += self.status * self.timeSincelastEvent
+
+    def saveData(self):
+        self.totalCustomersInQueue.append(self.areaCustomersInQueue / self.clock)
+        self.totalCustomersInSystem.append(
+            self.areaCustomersInQueue / self.clock + self.parameterLambda / self.parameterMu)
+        self.totalTimeInQueue.append(self.delays / self.customersDelayed)
+        self.totalTimeInSystem.append(self.delays / self.customersDelayed + 1 / self.parameterMu)
+        self.totalAreaServerStatus.append(self.areaServerStatus / self.clock)
+        # self.totalCustomersPerAmountInQueue.append(self.queueTimesPerCustomers)
+        self.totalDenegationProbability.append(self.amountRejected / self.amountArrivals)
+        self.totalSimulationTime.append(self.clock)
+
+    def showFinalData(self):
+        # Calcula y muestra los estimados de las medidas de performance
+        print("--------------------------------------------------------------------")
+        print(f"Limite de cola: {self.queueLimit}, Tasa de arribo: {self.arrivalMean}", "\n")
+        print("Promedio de tiempo en cola en minutos:        ", np.mean(self.totalTimeInQueue))
+        print("Promedio de tiempo en sistema en minutos:     ", np.mean(self.totalTimeInSystem))
+        print("Cantidad promedio de clientes en cola:        ", np.mean(self.totalCustomersInQueue))
+        print("Cantidad promedio de clientes en el sistema:  ", np.mean(self.totalCustomersInSystem))
+        # print("Probabilidad de n clientes en cola:          ", self.totalCustomersPerAmountInQueue)
+        print("Utilizacion del Servidor:                     ", np.mean(self.totalAreaServerStatus))
+        print("Probabilidad de ser denegado el servicio:     ", np.mean(self.totalDenegationProbability))
+        print(f"La simulacion termino en promedio en {np.mean(self.totalSimulationTime)} minutos")
+
+        self.plot(self.totalTimeInQueue,
+                  self.totalTimeInSystem,
+                  self.totalCustomersInQueue,
+                  self.totalCustomersInSystem,
+                  self.totalAreaServerStatus,
+                  self.totalDenegationProbability,
+                  f"Limite de cola: {self.queueLimit},  λ= {self.arrivalMean},  μ= {self.serviceRate}"
+                  )
+
+    def plot(self, a1, a2, a3, a4, a5, a6, titulo):
+        fig, axs = plt.subplots(3, 2, constrained_layout=True)
+        axs[0, 0].set_title('Numero promedio de clientes en el sistema(Ls)')
+        axs[0, 0].set_xlabel("Corridas")
+        axs[0, 0].set_ylabel('Cantidad')
+        axs[0, 0].plot(a4)
+
+        # 01
+        axs[0, 1].set_title('Tiempo promedio de cliente en el sistema(Ws)')
+        axs[0, 1].set_xlabel("Corridas")
+        axs[0, 1].set_ylabel('Tiempo')
+        axs[0, 1].plot(a2)
+
+        axs[1, 0].set_title('Numero promedio de clientes en cola(Lq)')
+        axs[1, 0].set_xlabel("Corridas")
+        axs[1, 0].set_ylabel('Cantidad')
+        axs[1, 0].plot(a3)
+
+        axs[1, 1].set_title('Tiempo promedio de espera en la cola (Wq)')
+        axs[1, 1].set_xlabel("Corridas")
+        axs[1, 1].set_ylabel('Tiempo')
+        axs[1, 1].plot(a1)
+
+        axs[2, 0].set_title('Porcentaje promedio de utilizacion del servidor (p)')
+        axs[2, 0].set_xlabel("Corridas")
+        axs[2, 0].set_ylabel('Porcentaje Utilizacion')
+        axs[2, 0].plot(a5)
+
+        axs[2, 1].set_title('Denegacion de servicio')
+        axs[2, 1].set_xlabel("Corridas")
+        axs[2, 1].set_ylabel('Probabilidad %')
+        axs[2, 1].plot(a6)
+        fig.suptitle(titulo)
+        win_manager = plt.get_current_fig_manager()
+        win_manager.window.state('zoomed')
+        # plt.savefig(f'Graficos/tableroMM1-cola-{self.queueLimit}-arribo-{self.arrivalRate}.png')
+        plt.show()
+
+    def main(self):
+        while self.customersDelayed < self.maxCustomers:
+            # Determinar el siguiente evento.
+            self.timingRoutine()
+            # Actualizar estadisticos
+            self.timeAndAverageStadistics()
+            # Ejecutar el evento que corresponda
+            self.eventRoutine()
+        self.saveData()
+
+
 if __name__ == "__main__":
 
     # PARAMETROS
     num_events = 2
-    mean_service = 0.4
+    mean_service = 1.5
     num_delays_required = 1000
-    Q_LIMIT = 10000
+    Q_LIMIT = 100000
 
     tamaños_cola = [0, 2, 5, 10, 50]
     par_mu = 1 / mean_service
-    tasas_arribos_relativas = [0.25, 0.5, 0.75, 1, 1.25]
+    tasas_arribos_relativas = [0.25, 0.5, 0.75]
     tasas_arribos = [t * par_mu for t in tasas_arribos_relativas]
 
     cant_simulaciones = 10
 
-    # Simulaciones mm1
+    # #Simulaciones mm1
     for t in tasas_arribos:
-        mean_interarrival = 1 / t
+        mean_interarrival = 1/t
         mm1 = Queue_mm1(num_events, mean_interarrival, mean_service, num_delays_required, Q_LIMIT)
         metricas, frecuencias_cola, frecuencias_sistema = mm1.simmulate(cant_simulaciones)
 
@@ -532,28 +686,22 @@ if __name__ == "__main__":
         mm1.reporte_metricas(metricas)
 
         # Métricas promedios acumulados
-        mm1.grafica_metricas(metricas, True)
+        #mm1.grafica_metricas(metricas,True)
+
 
         # Gráficas Frecuencias
-        frecuencias_cola_grafica, frecuencias_sistema_grafica = mm1.obtiene_promedios_frecuencias(frecuencias_cola,
-                                                                                                  frecuencias_sistema)
+        frecuencias_cola_grafica, frecuencias_sistema_grafica = mm1.obtiene_promedios_frecuencias(frecuencias_cola, frecuencias_sistema)
         mm1.reporte_frecuencias(frecuencias_cola_grafica, frecuencias_sistema_grafica)
         mm1.grafica_cant_clientes(frecuencias_cola_grafica, frecuencias_sistema_grafica)
 
-    # Simulaciones mm1k
-#    for t in tasas_arribos:
-#       mean_interarrival = 1 / t
+    tasaServicio = 2
+    tasasDeArribo = [0.25, 0.50, 0.75]
+    tasasDeArribo = [t * tasaServicio for t in tasasDeArribo]
+    limitesCola = [0, 2, 5, 10, 50]
+    corridas = 10
 
-#        promedios_simulacion = []
-
- #       for limite in tamaños_cola:
-  #          mm1 = Queue_mm1(num_events, mean_interarrival, mean_service, num_delays_required, Q_LIMIT,
- #                           cola_maxima=limite)
-   #         metricas, frecuencias_cola, frecuencias_sistema = mm1.simmulate(cant_simulaciones)
-
-            # Obtiene
-    #        promedio_metricas = mm1.obtiene_promedio_metricas(metricas)
-     #       promedios_simulacion.append(promedio_metricas)
-
-        # Métricas promedios
-     #   mm1.grafica_mm1k(promedios_simulacion, tamaños_cola)
+    for limiteCola in limitesCola:
+        listaIndividual = []
+        Q_LIMIT = limiteCola
+        for mediaArrival in tasasDeArribo:
+            mm1k(corridas, mediaArrival, 2, limiteCola, mediaArrival)
